@@ -47,7 +47,6 @@
     font-size: 14px;
 }
 
-/* Tabla */
 .tabla-container {
     max-height: 500px;
     overflow-y: auto;
@@ -86,7 +85,6 @@ tr.seleccionado {
     appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
-    
     text-align: center;
     padding: 10px 15px;
     border-radius: 8px;

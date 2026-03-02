@@ -43,9 +43,16 @@
     border: 2px solid #000;
 }
 
+.titulo-metricas{
+    color: rgb(139, 24, 139);
+}
+.titulo-metricas1{
+    color: rgb(245, 39, 245);
+}
+
 .tiempo-label {
-    display: block;
-    font-size: 20px;
+    display: flex;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -67,6 +74,7 @@
 }
 
 table {
+    text-align: center;
     width: 100%;
     border-collapse: collapse;
 }
@@ -74,10 +82,10 @@ table {
 thead th {
     position: sticky;
     top: 0;
-    background-color: #C4B5FD;
+    background-color: #e2abc9;
     color: white;
     padding: 12px;
-    text-align: left;
+    text-align: center;
     z-index: 1;
 }
 

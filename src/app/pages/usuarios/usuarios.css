@@ -1,15 +1,19 @@
 .contenedor-usuarios {
-    background-color: #F3F4F6; /* Fondo gris clarito de toda la app */
+    background-color: #F3F4F6;
     padding: 30px;
     min-height: 100vh;
     font-family: sans-serif;
+    margin-top: -80px;
+    max-width: 800px;
+    width: 100%;
+    margin-inline: auto;
 }
 
-/* Títulos y líneas separadoras */
 .titulo-cuentas {
-    color: #A78BFA; /* Morado claro de la imagen */
+    color: #A78BFA;
     font-size: 32px;
-    margin-bottom: 5px;
+    margin: 10px, auto, 100px, auto;
+    font-size: 50px;
 }
 
 .linea-gruesa {
@@ -32,11 +36,10 @@
     font-size: 16px;
 }
 
-/* Formulario a 2 columnas */
 .grid-campos {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px 40px; /* 20px vertical, 40px horizontal */
+    gap: 20px 40px;
     max-width: 800px;
     margin: 0 auto 40px auto;
 }
@@ -64,7 +67,6 @@
     border-color: #7C3AED;
 }
 
-/* Botones */
 .acciones-formulario {
     display: flex;
     justify-content: flex-end;
@@ -83,7 +85,7 @@
 }
 
 .btn-guardar {
-    background-color: #4C1D95; /* Morado oscuro */
+    background-color: #4C1D95;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -97,7 +99,6 @@
     cursor: not-allowed;
 }
 
-/* Tabla con Scrollbar integrado */
 .tabla-contenedor {
     background-color: white;
     border-radius: 5px;
@@ -116,11 +117,11 @@
 }
 
 .tabla-general thead th {
-    background-color: #C4B5FD;
+    background-color: #e2abc9;
     color: white;
     padding: 15px;
     text-align: left;
-    position: sticky; /* Fija el encabezado */
+    position: sticky;
     top: 0;
     z-index: 1;
 }
@@ -131,7 +132,6 @@
     color: #4B5563;
 }
 
-/* Botones de acción básicos en la tabla */
 .btn-accion {
     border: none;
     background: transparent;

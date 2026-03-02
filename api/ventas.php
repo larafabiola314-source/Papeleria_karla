@@ -1,26 +1,29 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json");
 
-include 'conexion.php';
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
-date_default_timezone_set('America/Mexico_City');
+include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents("php://input");
     $datos = json_decode($json);
 
     if ($datos && isset($datos->productos) && count($datos->productos) > 0) {
-        // Obtenemos los datos de la venta
-        $id_usuario = $datos->id_usuario;
-        $total = $datos->total;
+        $id_usuario = (int)$datos->id_usuario;
+        $total = (float)$datos->total;
         $fecha = date('Y-m-d H:i:s');
 
         mysqli_begin_transaction($conexion);
 
         try {
-            //Guardar en la tabla ventas
+            //guardar en la tabla
             $queryVenta = "INSERT INTO ventas (Id_Usuario, Total, Fecha) VALUES ($id_usuario, $total, '$fecha')";
             if (!mysqli_query($conexion, $queryVenta)) {
                 throw new Exception("Error al registrar la venta general: " . mysqli_error($conexion));
@@ -29,12 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             //descontar stock
             foreach ($datos->productos as $prod) {
-                $id_prod = $prod->id_producto;
-                $cant = $prod->cantidad;
-                $precio = $prod->precio;
-                $subtotal = $prod->subtotal;
+                $id_prod = (int)$prod->id_producto;
+                $cant = (int)$prod->cantidad;
+                $precio = (float)$prod->precio;
+                $subtotal = (float)$prod->subtotal;
 
-                // Insertar en la tabla ventas_productos
                 $queryDetalle = "INSERT INTO ventas_productos (Id_Venta, Id_Producto, Cantidad, Precio_Unidad, Subtotal) 
                                  VALUES ($id_venta, $id_prod, $cant, $precio, $subtotal)";
                 
