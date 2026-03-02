@@ -1,0 +1,88 @@
+.grid-inicio {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 10px;
+}
+
+.fila-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.tarjeta-blanca-borde {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+}
+
+.t-lila { 
+    border-color: #C8A2C8; 
+
+}
+.t-amarilla {
+    color: #FBBF24;
+     border-color: #FBBF24; 
+     background-color: #FFFBEB; 
+    }
+
+.tarjeta-rosa {
+    background-color: #f396c6;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #000;
+}
+
+.tarjeta-rosa2 {
+    background-color: #F472B6;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #000;
+}
+
+.tiempo-label {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.valor, .valor-rosa {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.contenedor-tabla-recientes {
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+    background-color: white;
+}
+
+.scroll-area {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #C4B5FD;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    z-index: 1;
+}
+
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #F3F4F6;
+    color: #4B5563;
+}

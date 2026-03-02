@@ -1,0 +1,40 @@
+<div class="contenedor-login">
+  <div class="tarjeta-login">
+    <h2>Papelería Karla</h2>
+    <div class="linea-separadora"></div>
+    <p>Ingresa tus datos para continuar</p>
+
+    <div class="alerta-error" *ngIf="mensajeError()">
+      <span></span> {{ mensajeError() }}
+    </div>
+
+    <form (submit)="iniciarSesion($event)">
+      <div class="campo">
+        <label for="usuario">Usuario *</label>
+        <input 
+          type="text" 
+          id="usuario" 
+          name="usuario"
+          placeholder="Usuario"
+          (input)="actualizarUsuario($event)">
+      </div>
+
+      <div class="campo">
+        <label for="contrasenia">Contraseña *</label>
+        <input 
+          type="password" 
+          id="contrasenia" 
+          name="contrasenia"
+          placeholder="Contraseña"
+          (input)="actualizarPassword($event)">
+      </div>
+
+      <button type="submit" class="boton-ingresar" [disabled]="cargando()">
+  <span *ngIf="!cargando()">Iniciar sesión</span>
+  <span *ngIf="cargando()">
+    <i class="loader"></i> espera
+  </span>
+</button>
+    </form>
+  </div>
+</div>

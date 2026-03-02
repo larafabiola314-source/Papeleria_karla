@@ -1,0 +1,143 @@
+.contenedor-usuarios {
+    background-color: #F3F4F6; /* Fondo gris clarito de toda la app */
+    padding: 30px;
+    min-height: 100vh;
+    font-family: sans-serif;
+}
+
+/* Títulos y líneas separadoras */
+.titulo-cuentas {
+    color: #A78BFA; /* Morado claro de la imagen */
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.linea-gruesa {
+    height: 3px;
+    background-color: #D8B4E2;
+    margin-bottom: 20px;
+}
+
+.encabezado-seccion h2 {
+    color: #4B5563;
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.titulo-formulario {
+    text-align: center;
+    color: #4B5563;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+/* Formulario a 2 columnas */
+.grid-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 40px; /* 20px vertical, 40px horizontal */
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-input label {
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 5px;
+}
+
+.grupo-input input {
+    padding: 10px;
+    border: 1px solid #9CA3AF;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+}
+
+.grupo-input input:focus {
+    border-color: #7C3AED;
+}
+
+/* Botones */
+.acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.btn-limpiar {
+    background-color: white;
+    color: #7C3AED;
+    border: 1px solid #7C3AED;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-guardar {
+    background-color: #4C1D95; /* Morado oscuro */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-guardar:disabled, .btn-limpiar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Tabla con Scrollbar integrado */
+.tabla-contenedor {
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.scroll-area {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tabla-general {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-general thead th {
+    background-color: #C4B5FD;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    position: sticky; /* Fija el encabezado */
+    top: 0;
+    z-index: 1;
+}
+
+.tabla-general tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #E5E7EB;
+    color: #4B5563;
+}
+
+/* Botones de acción básicos en la tabla */
+.btn-accion {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+}
+.btn-accion.editar { color: #3B82F6; }
+.btn-accion.eliminar { color: #EF4444; }

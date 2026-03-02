@@ -1,0 +1,108 @@
+<div class="contenedor-usuarios">
+  <h1 class="titulo-cuentas">Cuentas</h1>
+  <div class="linea-gruesa"></div>
+
+  <div class="encabezado-seccion">
+    <h2>Gestion de Personal</h2>
+  </div>
+  <div class="linea-gruesa"></div>
+
+  <section class="formulario-registro">
+    <div class="titulo-formulario">
+      <span>Datos del Usuario</span>
+    </div>
+    
+    <div class="grid-campos">
+      <div class="grupo-input">
+        <label>Nombre</label>
+        <input type="text" [value]="nombre()" (input)="nombre.set($any($event.target).value)">
+      </div>
+      
+      <div class="grupo-input">
+        <label>Apellido Paterno</label>
+        <input type="text" [value]="ap()" (input)="ap.set($any($event.target).value)">
+      </div>
+      
+      <div class="grupo-input">
+        <label>Apellido Materno</label>
+        <input type="text" [value]="am()" (input)="am.set($any($event.target).value)">
+      </div>
+
+      <div class="grupo-input">
+        <label>Nombre de Usuario</label>
+        <input type="text" [value]="username()" (input)="username.set($any($event.target).value)">
+      </div>
+
+      <div class="grupo-input">
+        <label>Contraseña</label>
+        <input type="password" [value]="password()" (input)="password.set($any($event.target).value)">
+      </div>
+
+      <div class="acciones-formulario">
+      <button 
+        *ngIf="idEditando()" 
+        class="btn-limpiar" 
+        (click)="limpiarCampos()"
+        [disabled]="cargando()"
+        [style.opacity]="cargando() ? '0.5' : '1'"
+        [style.cursor]="cargando() ? 'not-allowed' : 'pointer'">
+          Cancelar Edición
+      </button>
+  
+      <button 
+        *ngIf="!idEditando()" 
+        class="btn-limpiar" 
+        (click)="limpiarCampos()" 
+        [disabled]="cargando()"
+        [style.opacity]="cargando() ? '0.5' : '1'"
+        [style.cursor]="cargando() ? 'not-allowed' : 'pointer'">
+         Limpiar Campos
+      </button>
+  
+      <button 
+        class="btn-guardar" 
+        (click)="registrarUsuario()" 
+        [disabled]="cargando()"
+        [style.opacity]="cargando() ? '0.6' : '1'"
+        [style.cursor]="cargando() ? 'not-allowed' : 'pointer'">
+        {{ cargando() ? 'Procesando...' : (idEditando() ? 'Actualizar Usuario' : 'Guardar Usuario') }}
+      </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="tabla-contenedor scroll-area">
+    <table class="tabla-general">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre Completo</th>
+          <th>Username</th>
+          <th>Fecha de Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of listaUsuarios()">
+          <td>{{ u.Id_Usuario }}</td>
+          <td>{{ u.Nombre }} {{ u.AP }} {{ u.AM }}</td>
+          <td>{{ u.Username }}</td>
+          <td>{{ u.Created_at | date:'yyyy-MM-dd' }}</td>
+          <td>
+  <button class="btn-accion editar" (click)="prepararEdicion(u)">Editar</button>
+  
+  <button 
+    class="btn-accion eliminar" 
+    (click)="eliminarUsuario(u.Id_Usuario)"
+    [disabled]="u.Id_Usuario === idUsuarioLogueado()"
+    [style.opacity]="u.Id_Usuario === idUsuarioLogueado() ? '0.3' : '1'"
+    [style.cursor]="u.Id_Usuario === idUsuarioLogueado() ? 'not-allowed' : 'pointer'"
+    [title]="u.Id_Usuario === idUsuarioLogueado() ? 'No puedes eliminar tu cuenta actual' : 'Eliminar usuario'">
+    Eliminar
+  </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

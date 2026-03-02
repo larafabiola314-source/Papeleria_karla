@@ -1,0 +1,70 @@
+<div class="grid-inicio">
+  <div class="fila-tarjetas">
+    <div class="tarjeta-blanca-borde t-lila">
+      <span class="titulo-metricas">GANANCIAS ESTIMADAS</span>
+      <div class="valor">${{ gananciasHoy() | number:'1.2-2' }}</div>
+      
+      <span class="tendencia" [ngStyle]="{'color': tendenciaPorcentaje() >= 0 ? '#10B981' : '#EF4444'}">
+        {{ tendenciaPorcentaje() >= 0 ? '↑' : '↓' }} 
+        {{ tendenciaPorcentaje() > 0 ? tendenciaPorcentaje() : (tendenciaPorcentaje() * -1) }}% respecto a ayer
+      </span>
+    </div>
+
+    <div class="tarjeta-blanca-borde t-lila">
+      <span class="titulo-metricas">VENTAS TOTALES HOY</span>
+      <div class="valor">{{ ventasHoy() }}</div>
+      <span class="sub-detalle">Última venta: hace {{ minutosUltimaVenta() }} min</span>
+    </div>
+
+    <div class="tarjeta-blanca-borde t-amarilla">
+      <span class="titulo-metricas-alerta">ALERTAS DE STOCK</span>
+      <div class="valor">{{ alertasStock() < 10 ? '0' + alertasStock() : alertasStock() }}</div>
+      <span class="sub-detalle-alerta">⚠️ Productos por agotarse</span>
+    </div>
+  </div>
+
+  <h2 class="titulo-seccion">Numero de ventas por:</h2>
+
+  <div class="fila-tarjetas">
+    <div class="tarjeta-rosa">
+      <span class="tiempo-label">DIA</span>
+      <div class="valor-rosa">{{ ventasDia() }}</div>
+    </div>
+    
+    <div class="tarjeta-rosa2">
+      <span class="tiempo-label">SEMANA</span>
+      <div class="valor-rosa">{{ ventasSemana() }}</div>
+    </div>
+    
+    <div class="tarjeta-rosa">
+      <span class="tiempo-label">MES</span>
+      <div class="valor-rosa">{{ ventasMes() }}</div>
+    </div>
+  </div>
+
+  <h2 class="titulo-seccion">Ultimas Ventas Registradas 🖋️</h2>
+
+  <div class="contenedor-tabla-recientes">
+    <div class="scroll-area">
+      <table>
+        <thead>
+          <tr>
+            <th>Monto</th>
+            <th>Empleado</th>
+            <th>Fecha y Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+         <tr *ngFor="let v of ultimasVentas()">
+            <td><strong>${{ v.Total | number:'1.2-2' }}</strong></td>
+            <td>{{ v.Empleado }}</td>
+            <td>{{ v.Fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+          </tr>
+          <tr *ngIf="ultimasVentas().length === 0">
+            <td colspan="3" style="text-align: center; color: #9CA3AF;">No hay ventas registradas aún.</td>
+          </tr>
+      </tbody>
+      </table>
+    </div>
+  </div>
+</div>

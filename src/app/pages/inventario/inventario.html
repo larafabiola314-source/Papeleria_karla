@@ -1,0 +1,65 @@
+<div class="contenedor-pagina">
+  <section class="tarjeta-blanca-separada">
+    <h3 class="titulo-purpura">✨ Registrar Nuevo Producto</h3>
+    <div class="grid-formulario">
+      <div class="campo">
+        <label>NOMBRE DEL PRODUCTO</label>
+        <input type="text" [value]="nombre()" (input)="nombre.set($any($event.target).value)" placeholder="Ej: Cartulina">
+      </div>
+      <div class="campo">
+        <label>PRECIO DE VENTA</label>
+        <input type="number" min="0.01" step="0.01" [value]="precio()" (input)="precio.set($any($event.target).value)" placeholder="0.00">
+      </div>
+      <div class="campo">
+        <label>STOCK INICIAL</label>
+        <input type="number" min="0" [value]="stock()" (input)="stock.set($any($event.target).value)" placeholder="0">
+      </div>
+      <div class="campo">
+        <label>DESCRIPCIÓN</label>
+        <input type="text" [value]="descripcion()" (input)="descripcion.set($any($event.target).value)" placeholder="Detalles del producto">
+      </div>
+      <button class="btn-guardar-rosa" (click)="registrarProducto()"[disabled]="cargando()"[style.opacity]="cargando() ? '0.6' : '1'"[style.cursor]="cargando() ? 'not-allowed' : 'pointer'">{{ cargando() ? 'PROCESANDO...' : (idEditando() ? 'ACTUALIZAR CAMBIOS' : 'GUARDAR PRODUCTO') }}</button>
+       <button *ngIf="idEditando()" class="btn-cancelar" (click)="limpiarFormulario()">CANCELAR</button>
+    </div>
+  </section>
+
+  <section class="tarjeta-blanca-separada">
+    <div class="encabezado-tabla">
+      <h3 class="titulo-purpura">LISTADO DE EXISTENCIAS</h3>
+      <div class="buscador-contenedor">
+        <input type="text" placeholder="🔍 Buscar producto..." (input)="terminoBusqueda.set($any($event.target).value)">
+      </div>
+    </div>
+
+    <table class="tabla-GM">
+      <thead>
+        <tr>
+          <th>PRODUCTO</th>
+          <th>DESCRIPCIÓN</th>
+          <th>PRECIO</th>
+          <th>STOCK</th>
+          <th>ESTADO</th>
+          <th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of productosFiltrados()">
+          <td><strong>{{ p.Nombre }}</strong></td>
+          <td class="texto-gris">{{ p.Descripcion }}</td>
+          <td><strong>${{ p.Precio }}</strong></td>
+          <td>
+            {{ p.Stock }} 
+            <span class="badge-alerta" *ngIf="p.Stock <= 5">STOCK BAJO</span>
+          </td>
+          <td>
+            <span class="circulo-estado" [style.background-color]="p.Is_Active ? '#10B981' : '#EF4444'"></span>
+          </td>
+          <td>
+            <button class="link-editar" (click)="prepararEdicion(p)">Editar</button>
+            <button class="link-baja" (click)="darDeBaja(p.Id_Producto)">Baja</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
