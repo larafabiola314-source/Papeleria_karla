@@ -176,6 +176,7 @@ tr.seleccionado {
     cursor: pointer;
     margin-top: 10px;
     transition: 0.3s;
+    border-bottom: 7px solid #990465;
 }
 
 .btn-rosa-grande:disabled {
@@ -184,7 +185,7 @@ tr.seleccionado {
 }
 
 .btn-cancelar-claro {
-    background-color: #FDF2F8;
+    background-color: #eed9e8;
     color: #9b3b89;
     border: none;
     border-radius: 20px;

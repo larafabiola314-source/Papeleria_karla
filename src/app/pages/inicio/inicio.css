@@ -9,6 +9,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    margin-bottom: 30px;
+    
+}
+
+.titulo-seccion {
+    font-size: 30px;
 }
 
 .tarjeta-blanca-borde {
@@ -16,31 +22,55 @@
     padding: 20px;
     border-radius: 15px;
     border: 2px solid;
-    box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
-}
-
-.t-lila { 
     border-color: #C8A2C8; 
-
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+    border-bottom: 10px solid #5c5757;
 }
+
 .t-amarilla {
     color: #FBBF24;
      border-color: #FBBF24; 
      background-color: #FFFBEB; 
+     border-bottom: 10px solid #5c5757;
     }
 
+.fila-tarjetas2{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0;
+    width: 100%;
+}    
+
 .tarjeta-rosa {
-    background-color: #f396c6;
+    background-color: #ffffff;
     padding: 20px;
-    border-radius: 15px;
-    border: 2px solid #000;
+    margin-top: -40px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    border: 1px solid;
+    border-color: #5c5757;
+    max-width: 180px;
+    width: 100%;
+    border-bottom: 10px solid #5c5757;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.tarjeta-rosa2 {
-    background-color: #F472B6;
-    padding: 20px;
-    border-radius: 15px;
-    border: 2px solid #000;
+.tarjeta-rosa .tiempo-label{
+    font-size: 20px;
+    color: rgb(36, 170, 170);
+}
+
+.tarjeta-rosa .valor-rosa{
+    font-size: 50px;
+    text-align: center;
+    color: rgb(6, 193, 6);
+}
+
+.tarjeta-blanca-borde .sub-detalle{
+    color: rgb(148, 137, 137);
 }
 
 .titulo-metricas{
