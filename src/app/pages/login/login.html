@@ -1,42 +1,54 @@
-<div class="contenedor-login">
-  <div class="tarjeta-login">
-    <div class="logo-contenedor">
-      <img src="img/logo.png" alt="Logo Papelería Karla" class="logo-empresa">
+<div class="min-h-screen flex items-center justify-center bg-lila-karla p-4 font-sans">
+  
+  <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center transform transition-all">
+    
+    <div class="mb-6 flex justify-center">
+      <img src="img/logo.png" alt="Logo Papelería Karla" class="h-24 max-w-80 drop-shadow-lg">
     </div>
 
-    <h2>Papelería Karla</h2>
-    <div class="linea-separadora"></div>
-    <p>Ingresa tus datos para continuar</p>
+    <h2 class="text-3xl font-black text-slate-800 tracking-tight">Papelería Karla</h2>
+    
+    <div class="h-2 w-16 bg-lila-karla mx-auto my-4 rounded-full"></div>
+    
+    <p class="text-slate-500 font-medium mb-8">Ingresa tus datos para continuar</p>
 
-    <div class="alerta-error" *ngIf="mensajeError()">
+    <div class="mb-6 flex items-center justify-center gap-2 bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 text-sm font-bold" 
+         *ngIf="mensajeError()">
       <span>⚠️</span> {{ mensajeError() }}
     </div>
 
-    <form (submit)="iniciarSesion($event)">
-      <div class="campo">
-        <label for="usuario">Usuario</label>
+    <form (submit)="iniciarSesion($event)" class="space-y-6 text-left">
+      <div class="space-y-2">
+        <label for="usuario" class="text-xs font-black text-slate-500 ml-1 uppercase tracking-wider">Usuario</label>
         <input 
           type="text" 
           id="usuario" 
           name="usuario"
           placeholder="Nombre de usuario"
-          (input)="actualizarUsuario($event)">
+          (input)="actualizarUsuario($event)"
+          class="w-full p-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-medium text-slate-700 placeholder:text-slate-300">
       </div>
 
-      <div class="campo">
-        <label for="contrasenia">Contraseña</label>
+      <div class="space-y-2">
+        <label for="contrasenia" class="text-xs font-black text-slate-500 ml-1 uppercase tracking-wider">Contraseña</label>
         <input 
           type="password" 
           id="contrasenia" 
           name="contrasenia"
           placeholder="••••••••"
-          (input)="actualizarPassword($event)">
+          (input)="actualizarPassword($event)"
+          class="w-full p-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-medium text-slate-700 placeholder:text-slate-300">
       </div>
 
-      <button type="submit" class="boton-ingresar" [disabled]="cargando()">
-        <span *ngIf="!cargando()">Iniciar sesión</span>
-        <span *ngIf="cargando()" class="cargando-flex">
-          <i class="loader"></i> verificando...
+      <button type="submit" 
+              class="w-full py-4 mt-4 bg-lila-karla hover:bg-vino-karla text-white font-black rounded-2xl transition-all shadow-lg shadow-purple-200 active:scale-95 disabled:bg-slate-300 disabled:cursor-not-allowed disabled:shadow-none"
+              [disabled]="cargando()">
+        
+        <span *ngIf="!cargando()" class="tracking-wide">INICIAR SESIÓN</span>
+        
+        <span *ngIf="cargando()" class="flex items-center justify-center gap-3">
+          <div class="h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+          ESPERA...
         </span>
       </button>
     </form>
