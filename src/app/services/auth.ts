@@ -9,10 +9,10 @@ import { Usuario } from '../models/usuario';
 })
 export class Auth {
   private http = inject(HttpClient);
-  private urlApi = 'http://localhost/papeleria-karla/api/login.php';
-  private urlUsuarios = 'http://localhost/papeleria-karla/api/usuarios.php';
-  private urlInventario = 'http://localhost/papeleria-karla/api/inventario.php';
-  private urlVentas = 'http://localhost/papeleria-karla/api/ventas.php';
+  private urlApi = 'http://localhost/Papeleria_karla/api/login.php';
+  private urlUsuarios = 'http://localhost/Papeleria_karla/api/usuarios.php';
+  private urlInventario = 'http://localhost/Papeleria_karla/api/inventario.php';
+  private urlVentas = 'http://localhost:4200/Papeleria_karla/api/ventas.php';
 
   validarUsuario(username: string, password: string): Observable<any> {
     return this.http.post(this.urlApi, { username, password });
@@ -51,7 +51,7 @@ obtenerProductos(): Observable<Producto[]> {
 }
 
 obtenerDashboard() {
-   return this.http.get('http://localhost/papeleria-karla/api/dashboard.php'); }
+   return this.http.get('http://localhost:4200/papeleria-karla/api/dashboard.php'); }
 }
 
 
