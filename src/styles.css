@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@theme {
+  /* Aquí definimos tus colores de Papelería Karla */
+  --color-lila-karla: #C8A2C8;
+  --color-vino-karla: #932154;
+}
 * {
     font-family: Arial, Helvetica, sans-serif;
 }

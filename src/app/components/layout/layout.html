@@ -1,54 +1,69 @@
-<header class="barra-navegacion">
-  <div class="logo-seccion">
-    <img src="img/logo.png" alt="Logo" class="Logo">
+<header class="sticky top-0 z-50 flex h-20 items-center justify-between bg-white px-6 shadow-sm md:px-12">
+  <div class="flex items-center">
+    <img src="img/logo.png" alt="Logo" class="h-14 w-auto transition-transform hover:scale-105">
   </div>
 
-  <input type="checkbox" id="menu-check">
-  <label for="menu-check" class="menu-hamburguesa">
-    <span class="material-symbols-outlined">menu</span>
+  <input type="checkbox" id="menu-check" class="peer hidden">
+  <label for="menu-check" class="cursor-pointer text-lila-karla md:hidden">
+    <span class="material-symbols-outlined !text-3xl">menu</span>
   </label>
 
-  <nav class="enlaces">
-    <a routerLink="/inicio" routerLinkActive="activo">
+  <nav class="absolute left-0 top-20 hidden w-full flex-col bg-white shadow-xl peer-checked:flex md:static md:flex md:w-auto md:flex-row md:items-center md:gap-4 md:bg-transparent md:shadow-none">
+    <a routerLink="/inicio" routerLinkActive="!bg-lila-karla !text-white shadow-md" 
+       class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">home</span> Inicio
     </a>
-    <a routerLink="/inventario" routerLinkActive="activo">
+    <a routerLink="/inventario" routerLinkActive="!bg-lila-karla !text-white shadow-md"
+       class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">inventory_2</span> Inventario
     </a>
-    <a routerLink="/ventas" routerLinkActive="activo">
+    <a routerLink="/ventas" routerLinkActive="!bg-lila-karla !text-white shadow-md"
+       class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">sell</span> Ventas
     </a>
-    <a routerLink="/usuarios" routerLinkActive="activo">
+    <a routerLink="/usuarios" routerLinkActive="!bg-lila-karla !text-white shadow-md"
+       class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">group</span> Usuarios
     </a>
 
-    <button class="opcion-salir solo-movil" (click)="cerrarSesion()">
+    <button (click)="cerrarSesion()" 
+            class="flex items-center gap-2 border-t border-red-50 bg-red-50 px-8 py-4 text-sm font-bold text-red-500 md:hidden">
       <span class="material-symbols-outlined">logout</span> Cerrar Sesión
     </button>
   </nav>
 
-  <div class="usuario-menu solo-escritorio" (click)="toggleMenu()">
-    <span class="material-symbols-outlined user-icon">account_circle</span>
-    <span class="username-display">{{ nombreUsuarioLogueado() }}</span>
-    <span class="material-symbols-outlined">expand_more</span>
+  <div class="relative hidden cursor-pointer items-center gap-3 rounded-full border border-gray-100 bg-gray-50 px-4 py-2 transition-colors hover:bg-gray-100 md:flex" 
+       (click)="toggleMenu()">
+    <span class="material-symbols-outlined text-lila-karla !text-2xl">account_circle</span>
+    <span class="text-sm font-bold text-gray-800">{{ nombreUsuarioLogueado() }}</span>
+    <span class="material-symbols-outlined text-gray-400 !text-xl">expand_more</span>
 
-    <div class="dropdown-menu" *ngIf="menuAbierto()">
-      <button class="opcion-salir" (click)="cerrarSesion()">
+    <div *ngIf="menuAbierto()" 
+         class="absolute right-0 top-full mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
+      <button (click)="cerrarSesion()" 
+              class="flex w-full items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 transition-colors hover:bg-red-50">
         <span class="material-symbols-outlined">logout</span> Cerrar Sesión
       </button>
     </div>
   </div>
 </header>
-
-<div class="franja-titulo">
-  <div class="info-izquierda">
-    <h1>{{ tituloPagina }}</h1>
-    <span>{{ subtituloPagina }}</span>
+<div class="border-b-2 border-gray-100 bg-white px-8 py-10 md:px-12">
+  <div class="flex items-center gap-4">
+    <div class="rounded-2xl bg-purple-50 p-3 text-lila-karla">
+      <span class="material-symbols-outlined !text-4xl">
+        {{ tituloPagina === 'Inventario' ? 'inventory_2' : 
+           tituloPagina === 'Ventas' ? 'payments' : 'dashboard' }}
+      </span>
+    </div>
+    <div>
+      <h1 class="text-3xl font-black uppercase tracking-tight text-lila-karla">{{ tituloPagina }}</h1>
+      <p class="text-sm font-semibold text-gray-400">{{ subtituloPagina }}</p>
+    </div>
   </div>
 </div>
 
-<main class="escenario-gris">
-  <div class="contenedor-centrado">
+<main class="min-h-screen bg-slate-50 py-8">
+  <div class="mx-auto max-w-7xl px-6 md:px-10">
     <router-outlet></router-outlet>
   </div>
 </main>
