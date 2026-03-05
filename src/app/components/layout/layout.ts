@@ -50,8 +50,8 @@ export class Layout implements OnInit{
       this.tituloPagina = 'PUNTO DE VENTA';
       this.subtituloPagina = 'Papeleria Karla - Registro de transacciones';
     } else {
-      this.tituloPagina = 'PUNTO DE VENTA';
-      this.subtituloPagina = 'Papelería Karla - Registro de Transacciones';
+      this.tituloPagina = 'DASHBOARD';
+      this.subtituloPagina = 'Panel de Administración';
     }
   }
 

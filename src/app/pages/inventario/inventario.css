@@ -1,116 +1,176 @@
+/* 1. Contenedor y Estructura de Tarjetas */
 .contenedor-pagina {
-    padding: 30px 50px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.tarjeta-blanca-separada {
-    background-color: #FFFFFF;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    border: 5px solid #C4B5FD;
-}
-
-.tarjeta-blanca-separada1 {
-    background-color: #FFFFFF;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.grid-formulario {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) auto; 
-    gap: 20px;
-    align-items: flex-end;
-}
-
-.campo {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.campo label {
-    font-size: 12px;
-    font-weight: bold;
-    color: #9CA3AF;
-}
-
-.campo input {
-    padding: 12px;
-    border: 1px solid #C8A2C8;
-    border-radius: 10px;
-    background-color: #F9F5FF;
-    outline: none;
-}
-
-.btn-guardar-rosa {
-    background-color: #EC4899;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.btn-cancelar{
-    background-color: #9CA3AF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+.tarjeta-blanca-separada, .tarjeta-blanca-separada1 {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
 }
 
 .titulo-purpura {
-    color: #7C3AED;
-    margin-bottom: 25px;
-    font-size: 1.2rem;
-    font-weight: bold;
+  color: #C8A2C8;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 2. Formulario de Registro (Grid) */
+.grid-formulario {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.grid-formulario .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grid-formulario label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.grid-formulario input {
+  padding: 12px;
+  border: 2px solid #edf2f7;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  background-color: #f8fafc;
+}
+
+.grid-formulario input:focus {
+  outline: none;
+  border-color: #C8A2C8;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(200, 162, 200, 0.15);
+}
+
+/* 3. Botones */
+.btn-guardar-rosa {
+  background-color: #C8A2C8;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(200, 162, 200, 0.3);
+}
+
+.btn-guardar-rosa:hover:not(:disabled) {
+  background-color: #932154;
+  transform: translateY(-2px);
+}
+
+.btn-cancelar {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-cancelar:hover {
+  background-color: #e2e8f0;
+}
+
+/* 4. Buscador y Tabla */
+.encabezado-tabla {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.buscador-contenedor input {
+  padding: 10px 15px;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
+  width: 250px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: width 0.3s ease;
+}
+
+.buscador-contenedor input:focus {
+  width: 320px;
+  border-color: #C8A2C8;
 }
 
 .tabla-GM {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .tabla-GM th {
-    text-align: left;
-    color: #7C3AED;
-    padding: 15px;
-    border-bottom: 2px solid #F3E8FF;
-    font-size: 14px;
+  text-align: left;
+  padding: 1rem;
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-bottom: 1px solid #edf2f7;
 }
 
 .tabla-GM td {
-    padding: 15px;
-    border-bottom: 1px solid #F3E8FF;
-    color: #1F2937;
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f8fafc;
+  font-size: 0.95rem;
 }
 
+.texto-gris { color: #94a3b8; font-size: 0.85rem; }
 
+/* 5. Badges y Estados */
 .badge-alerta {
-    background-color: #FEF3C7;
-    color: #D97706;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: bold;
-    margin-left: 10px;
+  background-color: #fee2e2;
+  color: #ef4444;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-left: 8px;
 }
 
 .circulo-estado {
-    height: 12px;
-    width: 12px;
-    background-color: #10B981;
-    border-radius: 50%;
-    display: inline-block;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
-.link-editar { color: #7C3AED; background: none; border: none; font-weight: bold; cursor: pointer; margin-right: 15px; }
-.link-baja { color: #E02F58; background: none; border: none; font-weight: bold; cursor: pointer; }
+/* 6. Acciones */
+.link-editar, .link-baja {
+  background: none;
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 15px;
+  transition: color 0.2s;
+}
+
+.link-editar { color: #C8A2C8; }
+.link-editar:hover { color: #7C3AED; }
+
+.link-baja { color: #ef4444; }
+.link-baja:hover { color: #b91c1c; }

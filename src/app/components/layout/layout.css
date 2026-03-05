@@ -1,118 +1,220 @@
-.Logo{
-    border-radius: 50%;
-}
+/* 1. Reset y Base */
+* { box-sizing: border-box; }
 
+/* 2. Barra de Navegación */
 .barra-navegacion {
-    background-color: #C8A2C8; 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 50px;
-    border-bottom: 2px solid #9d7ba0; 
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 80px; /* Altura fija para evitar saltos */
 }
 
-.franja-titulo {
-    background-color: #C8A2C8; 
-    padding: 20px 50px;
-    color: white;
-    display: flex; 
-    align-items: center;
+.logo-seccion .Logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
 }
 
-.franja-titulo h1 { margin: 0; font-size: 24px; }
-
-.escenario-gris {
-    background-color: #ffffff; 
-    min-height: 80vh;
-    padding: 40px 0;
-}
-
-.contenedor-centrado {
-    width: 90%;
-    margin: 0 auto;
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.usuario-menu {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.username-display {
-    color: white;
-    text-decoration: none;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 1rem; 
-    height: 70px;
-}
-
-.btn-flecha {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 8px;
-    padding: 10px;
-    z-index: 100;
-    min-width: 150px;
-    margin-top: 10px;
-}
-
-.opcion-salir {
-    width: 100%;
-    background: none;
-    border: none;
-    color: #E02F58;
-    text-align: left;
-    padding: 8px 12px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.opcion-salir:hover {
-    background-color: #FEF2F2; 
-}
-
+/* 3. Enlaces (Escritorio) */
 .enlaces {
-    display: flex;
-    gap: 0; 
-    flex-grow: 1; 
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .enlaces a {
-    color: white;
-    text-decoration: none;
-    padding: 0 20px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
-
+.enlaces a:hover {
+  color: #C8A2C8;
+  background-color: #f3f4f6;
+}
 
 .enlaces a.activo {
-    color: #E02F58;
+  color: #ffffff;
+  background-color: #C8A2C8;
+  box-shadow: 0 4px 10px rgba(200, 162, 200, 0.3);
 }
 
-.info-izquierda {
-    display: flex;
+/* 4. Usuario y Dropdown */
+.usuario-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: white;
+  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid #edf2f7;
+  z-index: 2000;
+  overflow: hidden;
+}
+
+.opcion-salir {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ef4444;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.opcion-salir:hover { background-color: #fef2f2; }
+
+/* 5. Estructura de Contenido (Ajuste de pantalla) */
+.franja-titulo {
+  background: transparent;
+  color: #1e293b;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.info-izquierda h1 {
+  color: #C8A2C8;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.escenario-gris {
+  background-color: #f1f5f9;
+  min-height: calc(100vh - 80px); /* Ajuste dinámico según la navbar */
+  padding: 2rem 0;
+}
+
+.contenedor-centrado {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* 6. Responsivo (Móvil) */
+#menu-check, .menu-hamburguesa { display: none; }
+
+@media (max-width: 900px) {
+  .menu-hamburguesa {
+    display: block;
+    cursor: pointer;
+    color: #C8A2C8;
+  }
+
+  .enlaces {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: white;
     flex-direction: column;
+    display: none; 
+    padding: 1rem 0;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  #menu-check:checked ~ .enlaces { display: flex; }
+
+  .enlaces a {
+    width: 100%;
+    border-radius: 0;
+    padding: 15px 2rem;
+  }
+
+  .username-display { display: none; }
+}
+
+/* Material Icons Helper */
+.material-symbols-outlined {
+  font-size: 22px !important;
+}
+
+/* --- CONFIGURACIÓN PARA ESCRITORIO (POR DEFECTO) --- */
+
+.solo-movil {
+  display: none !important; /* Oculto en PC */
+}
+
+.usuario-menu.solo-escritorio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  position: relative;
+}
+
+/* --- CONFIGURACIÓN PARA MÓVIL --- */
+
+@media (max-width: 900px) {
+  /* 1. Ocultamos el menú de usuario de la derecha */
+  .solo-escritorio {
+    display: none !important;
+  }
+
+  /* 2. Mostramos el botón de cerrar sesión dentro del menú desplegable */
+  .solo-movil {
+    display: flex !important;
+    width: 100%;
+    padding: 20px !important;
+    background-color: #fef2f2 !important; /* Fondo rojizo suave */
+    border-top: 1px solid #fee2e2 !important;
+    color: #ef4444 !important;
+    justify-content: flex-start;
+    border-radius: 0;
+  }
+
+  /* Ajuste de la lista de enlaces en móvil */
+  .enlaces {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    display: none;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    z-index: 999;
+  }
+
+  #menu-check:checked ~ .enlaces {
+    display: flex;
+  }
+
+  .enlaces a {
+    width: 100%;
+    padding: 15px 2rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
 }

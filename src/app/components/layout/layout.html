@@ -1,21 +1,43 @@
 <header class="barra-navegacion">
   <div class="logo-seccion">
-    <img src="img/logo.jpg" alt="Logo" width="80px" height="80px" class="Logo">
+    <img src="img/logo.png" alt="Logo" class="Logo">
   </div>
-  <nav class="enlaces">
-    <a routerLink="/inicio" routerLinkActive="activo">Inicio</a>
-    <a routerLink="/inventario" routerLinkActive="activo">Inventario</a>
-    <a routerLink="/ventas" routerLinkActive="activo">Ventas</a>
-    <a routerLink="/usuarios" routerLinkActive="activo">Usuarios</a>
-  </nav>
-  <div class="usuario-menu">
-  <span class="username-display">{{ nombreUsuarioLogueado() }}</span>
-  <button class="btn-flecha" (click)="toggleMenu()">▼</button>
 
-  <div class="dropdown-menu" *ngIf="menuAbierto()">
-      <button class="opcion-salir" (click)="cerrarSesion()">Cerrar Sesión</button>
+  <input type="checkbox" id="menu-check">
+  <label for="menu-check" class="menu-hamburguesa">
+    <span class="material-symbols-outlined">menu</span>
+  </label>
+
+  <nav class="enlaces">
+    <a routerLink="/inicio" routerLinkActive="activo">
+      <span class="material-symbols-outlined">home</span> Inicio
+    </a>
+    <a routerLink="/inventario" routerLinkActive="activo">
+      <span class="material-symbols-outlined">inventory_2</span> Inventario
+    </a>
+    <a routerLink="/ventas" routerLinkActive="activo">
+      <span class="material-symbols-outlined">sell</span> Ventas
+    </a>
+    <a routerLink="/usuarios" routerLinkActive="activo">
+      <span class="material-symbols-outlined">group</span> Usuarios
+    </a>
+
+    <button class="opcion-salir solo-movil" (click)="cerrarSesion()">
+      <span class="material-symbols-outlined">logout</span> Cerrar Sesión
+    </button>
+  </nav>
+
+  <div class="usuario-menu solo-escritorio" (click)="toggleMenu()">
+    <span class="material-symbols-outlined user-icon">account_circle</span>
+    <span class="username-display">{{ nombreUsuarioLogueado() }}</span>
+    <span class="material-symbols-outlined">expand_more</span>
+
+    <div class="dropdown-menu" *ngIf="menuAbierto()">
+      <button class="opcion-salir" (click)="cerrarSesion()">
+        <span class="material-symbols-outlined">logout</span> Cerrar Sesión
+      </button>
     </div>
-</div>
+  </div>
 </header>
 
 <div class="franja-titulo">
