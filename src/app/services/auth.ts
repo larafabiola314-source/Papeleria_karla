@@ -11,7 +11,7 @@ export class Auth {
   private http = inject(HttpClient);
   private urlApi = 'http://localhost/Papeleria_karla/api/login.php';
   private urlUsuarios = 'http://localhost/Papeleria_karla/api/usuarios.php';
-  private urlInventario = 'http://localhost/Papeleria_karla/api/inventario.php';
+  private urlInventario = 'http://127.0.0.1:8000/api/productos';
   private urlVentas = 'http://localhost/Papeleria_karla/api/ventas.php';
 
   validarUsuario(username: string, password: string): Observable<any> {
