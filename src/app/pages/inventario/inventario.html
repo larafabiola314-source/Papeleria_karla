@@ -1,65 +1,98 @@
-<div class="contenedor-pagina">
-  <section class="tarjeta-blanca-separada">
-    <h3 class="titulo-purpura">✨ Registrar Nuevo Producto</h3>
-    <div class="grid-formulario">
-      <div class="campo">
-        <label>NOMBRE DEL PRODUCTO</label>
-        <input type="text" [value]="nombre()" (input)="nombre.set($any($event.target).value)" placeholder="Ej: Cartulina">
+<div class="flex flex-col gap-8 p-4 md:p-6">
+  
+  <section class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100 md:p-8">
+    <h3 class="mb-6 text-lg font-black tracking-tight text-lila-karla uppercase flex items-center gap-2">
+      <span class="text-xl">✨</span> Registrar Nuevo Producto
+    </h3>
+    
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 items-end">
+      <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Nombre del Producto</label>
+        <input type="text" [value]="nombre()" (input)="nombre.set($any($event.target).value)" 
+               placeholder="Ej: Cartulina"
+               class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
       </div>
-      <div class="campo">
-        <label>PRECIO DE VENTA</label>
-        <input type="number" min="0.01" step="0.01" [value]="precio()" (input)="precio.set($any($event.target).value)" placeholder="0.00">
+
+      <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Precio de Venta</label>
+        <input type="number" min="0.01" step="0.01" [value]="precio()" (input)="precio.set($any($event.target).value)" 
+               placeholder="0.00"
+               class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
       </div>
-      <div class="campo">
-        <label>STOCK INICIAL</label>
-        <input type="number" min="0" [value]="stock()" (input)="stock.set($any($event.target).value)" placeholder="0">
+
+      <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Stock Inicial</label>
+        <input type="number" min="0" [value]="stock()" (input)="stock.set($any($event.target).value)" 
+               placeholder="0"
+               class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
       </div>
-      <div class="campo">
-        <label>DESCRIPCIÓN</label>
-        <input type="text" [value]="descripcion()" (input)="descripcion.set($any($event.target).value)" placeholder="Detalles del producto">
+
+      <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Descripción</label>
+        <input type="text" [value]="descripcion()" (input)="descripcion.set($any($event.target).value)" 
+               placeholder="Detalles..."
+               class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
       </div>
-      <button class="btn-guardar-rosa" (click)="registrarProducto()"[disabled]="cargando()"[style.opacity]="cargando() ? '0.6' : '1'"[style.cursor]="cargando() ? 'not-allowed' : 'pointer'">{{ cargando() ? 'PROCESANDO...' : (idEditando() ? 'ACTUALIZAR CAMBIOS' : 'GUARDAR PRODUCTO') }}</button>
-       <button *ngIf="idEditando()" class="btn-cancelar" (click)="limpiarFormulario()">CANCELAR</button>
+
+      <div class="flex gap-3 lg:col-span-4 justify-end mt-2">
+        <button *ngIf="idEditando()" (click)="limpiarFormulario()"
+                class="rounded-2xl bg-slate-100 px-6 py-3 text-xs font-black text-slate-500 transition-all hover:bg-slate-200 active:scale-95">
+          CANCELAR
+        </button>
+        <button (click)="registrarProducto()" [disabled]="cargando()"
+                class="rounded-2xl bg-lila-karla px-8 py-3 text-xs font-black text-white shadow-lg shadow-purple-100 transition-all hover:bg-vino-karla active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ cargando() ? 'PROCESANDO...' : (idEditando() ? 'ACTUALIZAR CAMBIOS' : 'GUARDAR PRODUCTO') }}
+        </button>
+      </div>
     </div>
   </section>
 
-  <section class="tarjeta-blanca-separada1">
-    <div class="encabezado-tabla">
-      <h3 class="titulo-purpura">LISTADO DE EXISTENCIAS</h3>
-      <div class="buscador-contenedor">
-        <input type="text" placeholder="🔍 Buscar producto..." (input)="terminoBusqueda.set($any($event.target).value)">
+  <section class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100 md:p-8">
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <h3 class="text-lg font-black tracking-tight text-lila-karla uppercase">Listado de Existencias</h3>
+      <div class="relative w-full sm:w-72">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+        <input type="text" placeholder="Buscar producto..." 
+               (input)="terminoBusqueda.set($any($event.target).value)"
+               class="w-full rounded-full border border-slate-100 bg-slate-50 py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-lila-karla focus:bg-white focus:ring-4 focus:ring-purple-50">
       </div>
     </div>
 
-    <table class="tabla-GM">
-      <thead>
-        <tr>
-          <th>PRODUCTO</th>
-          <th>DESCRIPCIÓN</th>
-          <th>PRECIO</th>
-          <th>STOCK</th>
-          <th>ESTADO</th>
-          <th>ACCIONES</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of productosFiltrados()">
-          <td><strong>{{ p.Nombre }}</strong></td>
-          <td class="texto-gris">{{ p.Descripcion }}</td>
-          <td><strong>${{ p.Precio }}</strong></td>
-          <td>
-            {{ p.Stock }} 
-            <span class="badge-alerta" *ngIf="p.Stock <= 5">STOCK BAJO</span>
-          </td>
-          <td>
-            <span class="circulo-estado" [style.background-color]="p.Is_Active ? '#10B981' : '#EF4444'"></span>
-          </td>
-          <td>
-            <button class="link-editar" (click)="prepararEdicion(p)">Editar</button>
-            <button class="link-baja" (click)="darDeBaja(p.Id_Producto)">Baja</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-hidden rounded-2xl border border-slate-50">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-left">
+          <thead class="bg-slate-50 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+            <tr>
+              <th class="p-4">Producto</th>
+              <th class="p-4">Descripción</th>
+              <th class="p-4 text-center">Precio</th>
+              <th class="p-4 text-center">Stock</th>
+              <th class="p-4 text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr *ngFor="let p of productosFiltrados()" class="group transition-colors hover:bg-slate-50/50">
+              <td class="p-4 text-sm font-black text-slate-800">{{ p.Nombre }}</td>
+              <td class="p-4 text-xs font-medium text-slate-400">{{ p.Descripcion }}</td>
+              <td class="p-4 text-center text-sm font-black text-slate-700">${{ p.Precio }}</td>
+              <td class="p-4 text-center text-sm font-bold">
+                <div class="flex flex-col items-center gap-1">
+                  {{ p.Stock }}
+                  <span *ngIf="p.Stock <= 5" class="rounded-md bg-red-50 px-2 py-0.5 text-[9px] font-black text-red-500">
+                    STOCK BAJO
+                  </span>
+                </div>
+              </td>
+              <td class="p-4 text-center">
+                <div class="flex justify-center gap-4">
+                  <button (click)="prepararEdicion(p)" class="text-xs font-black text-lila-karla hover:text-vino-karla transition-colors">EDITAR</button>
+                  <button (click)="darDeBaja(p.Id_Producto)" class="text-xs font-black text-red-400 hover:text-red-600 transition-colors">BAJA</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </section>
 </div>

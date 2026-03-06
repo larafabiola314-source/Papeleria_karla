@@ -1,68 +1,103 @@
-<div class="contenedor-ventas">
+<div class="flex flex-col gap-6 p-4 font-sans lg:flex-row md:p-6">
   
-  <div class="columna-izquierda">
-    <div class="tarjeta-blanca buscador-container">
-      <h3 class="titulo-purpura">🔍 Buscar Producto</h3>
-      <div class="caja-input">
-        <span class="icono-lupa">🔎</span>
+  <div class="flex-1 space-y-6">
+    
+    <div class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100">
+      <h3 class="mb-4 text-sm font-black tracking-widest text-lila-karla uppercase flex items-center gap-2">
+        <span class="material-symbols-outlined !text-xl">search</span> Buscar Producto
+      </h3>
+      <div class="relative">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔎</span>
         <input 
           type="text" 
-          placeholder="Escribe el nombre..." 
+          placeholder="Escribe el nombre del producto..." 
           [value]="terminoBusqueda()"
-          (input)="terminoBusqueda.set($any($event.target).value)">
+          (input)="terminoBusqueda.set($any($event.target).value)"
+          class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-4 pl-12 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white focus:ring-4 focus:ring-purple-50">
       </div>
     </div>
 
-    <div class="tarjeta-blanca tabla-container">
-      <table>
-        <thead>
-          <tr>
-            <th>PRODUCTO</th>
-            <th>PRECIO</th>
-            <th>CANT.</th>
-            <th>SUBTOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of productosFiltrados()" [class.seleccionado]="p.cantidad > 0">
-            <td>{{ p.Nombre }}</td>
-            <td><strong>${{ p.Precio | number:'1.2-2' }}</strong></td>
-            
-            <td class="celda-controles">
-                <select class="selector-cantidad" [value]="p.cantidad" (change)="cambiarCantidad(p.Id_Producto, $event)"[disabled]="p.Stock === 0">
-    
-            <option *ngFor="let cant of generarOpcionesStock(p.Stock)" [value]="cant" [selected]="cant === p.cantidad">
-             {{ cant }}
-             </option>
-          </select>
-  
-          <span class="badge-sin-stock" *ngIf="p.Stock === 0">Agotado</span>
-           </td>
-            
-            <td class="texto-subtotal" [class.activo]="p.cantidad > 0">
-              <strong>${{ (p.Precio * p.cantidad) | number:'1.2-2' }}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="rounded-3xl bg-white shadow-sm border border-slate-100 overflow-hidden">
+      <div class="max-h-[500px] overflow-y-auto">
+        <table class="w-full border-collapse text-left">
+          <thead class="sticky top-0 bg-slate-50 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+            <tr>
+              <th class="p-4">Producto</th>
+              <th class="p-4">Precio</th>
+              <th class="p-4 text-center">Cant.</th>
+              <th class="p-4 text-right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr *ngFor="let p of productosFiltrados()" 
+                class="transition-colors hover:bg-slate-50/50"
+                [class.bg-purple-50/30]="p.cantidad > 0">
+              <td class="p-4">
+                <div class="text-sm font-bold text-slate-800">{{ p.Nombre }}</div>
+              </td>
+              <td class="p-4 text-sm font-medium text-slate-500">${{ p.Precio | number:'1.2-2' }}</td>
+              
+              <td class="p-4 text-center">
+                <div class="flex flex-col items-center gap-1">
+                  <select 
+                    class="rounded-lg border border-slate-200 bg-white p-1 text-xs font-bold outline-none focus:border-lila-karla disabled:opacity-30"
+                    [value]="p.cantidad" 
+                    (change)="cambiarCantidad(p.Id_Producto, $event)"
+                    [disabled]="p.Stock === 0">
+                    <option *ngFor="let cant of generarOpcionesStock(p.Stock)" [value]="cant">
+                      {{ cant }}
+                    </option>
+                  </select>
+                  <span class="rounded bg-red-100 px-2 py-0.5 text-[9px] font-black text-red-500 uppercase" *ngIf="p.Stock === 0">Agotado</span>
+                </div>
+              </td>
+              
+              <td class="p-4 text-right text-sm font-black" [class.text-lila-karla]="p.cantidad > 0" [class.text-slate-300]="p.cantidad === 0">
+                ${{ (p.Precio * p.cantidad) | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <div class="columna-derecha">
-    <div class="tarjeta-blanca ticket-container">
+  <div class="w-full lg:w-80">
+    <div class="sticky top-24 rounded-3xl bg-white p-6 shadow-xl border border-slate-100">
+      <h3 class="mb-6 text-center text-xs font-black tracking-widest text-slate-400 uppercase">Resumen de Venta</h3>
       
-      <div class="fila-resumen">
-        <span class="etiqueta-negra">Unidades:</span>
-        <span class="valor-negro">{{ totalUnidades() }}</span>
-      </div>
-      
-      <div class="fila-resumen mt-10">
-        <span class="etiqueta-morada">TOTAL</span>
-        <span class="valor-dorado">${{ totalVenta() | number:'1.2-2' }}</span>
+      <div class="space-y-4 border-b border-dashed border-slate-200 pb-6">
+        <div class="flex justify-between items-center">
+          <span class="text-sm font-bold text-slate-500">Unidades:</span>
+          <span class="text-lg font-black text-slate-800">{{ totalUnidades() }}</span>
+        </div>
+        
+        <div class="flex flex-col gap-1 pt-2">
+          <span class="text-[10px] font-black text-lila-karla uppercase tracking-widest">Total a Pagar</span>
+          <span class="text-4xl font-black text-slate-900">${{ totalVenta() | number:'1.2-2' }}</span>
+        </div>
       </div>
 
-      <button class="btn-rosa-grande" [disabled]="totalUnidades() === 0 || cargando()"[style.opacity]="cargando() ? '0.6' : '1'"[style.cursor]="cargando() ? 'not-allowed' : 'pointer'"(click)="realizarVenta()">{{ cargando() ? 'PROCESANDO' : 'Realizar Venta' }}</button>
-      <button class="btn-cancelar-claro" *ngIf="totalUnidades() > 0"(click)="cancelarVenta()" [disabled]="cargando()"[style.opacity]="cargando() ? '0.5' : '1'"[style.cursor]="cargando() ? 'not-allowed' : 'pointer'">X CANCELAR</button>
+      <div class="mt-6 space-y-3">
+        <button 
+          (click)="realizarVenta()"
+          [disabled]="totalUnidades() === 0 || cargando()"
+          class="w-full rounded-2xl bg-lila-karla py-4 text-sm font-black text-white shadow-lg shadow-purple-100 transition-all hover:bg-vino-karla active:scale-95 disabled:bg-slate-200 disabled:shadow-none disabled:cursor-not-allowed">
+          {{ cargando() ? 'PROCESANDO...' : 'REALIZAR VENTA' }}
+        </button>
+        
+        <button 
+          *ngIf="totalUnidades() > 0"
+          (click)="cancelarVenta()" 
+          [disabled]="cargando()"
+          class="w-full rounded-2xl bg-white border-2 border-red-50 py-3 text-xs font-bold text-red-400 transition-all hover:bg-red-50 hover:text-red-500 disabled:opacity-50">
+          ✕ CANCELAR VENTA
+        </button>
+      </div>
+
+      <div class="mt-6 flex justify-center gap-1 opacity-20">
+        <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="h-1 w-1 rounded-full bg-slate-400"></div>
+      </div>
     </div>
   </div>
 
