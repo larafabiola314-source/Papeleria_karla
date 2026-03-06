@@ -84,17 +84,22 @@
             </td>
             <td class="p-4 text-xs font-medium text-slate-400">{{ u.Created_at | date:'dd/MM/yyyy' }}</td>
             <td class="p-4 pr-8 text-right">
-              <div class="flex justify-end gap-3">
+              <div class="flex justify-end items-center gap-2">
                 <button (click)="prepararEdicion(u)" 
-                        class="text-xs font-black text-lila-karla hover:text-vino-karla transition-colors">
-                  EDITAR
+                        class="group relative flex h-9 w-9 items-center justify-center rounded-full transition-all hover:bg-purple-50 active:scale-90"
+                        title="Editar datos de usuario">
+                  <span class="material-symbols-outlined !text-xl text-lila-karla group-hover:text-vino-karla">
+                    person_edit
+                  </span>
                 </button>
                 
                 <button (click)="eliminarUsuario(u.Id_Usuario)"
                         [disabled]="u.Id_Usuario === idUsuarioLogueado()"
                         [title]="u.Id_Usuario === idUsuarioLogueado() ? 'No puedes eliminar tu propia cuenta' : 'Eliminar usuario'"
-                        class="text-xs font-black text-red-400 hover:text-red-600 transition-colors disabled:opacity-20 disabled:cursor-not-allowed">
-                  ELIMINAR
+                        class="group relative flex h-9 w-9 items-center justify-center rounded-full transition-all hover:bg-red-50 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent">
+                  <span class="material-symbols-outlined !text-xl text-red-400 group-hover:text-red-600">
+                    person_remove
+                  </span>
                 </button>
               </div>
             </td>
