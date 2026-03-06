@@ -66,9 +66,12 @@
               <span class="text-xs font-black text-lila-karla">${{ (p.Precio * p.cantidad) | number:'1.2-2' }}</span>
             </div>
         </div>
-        <div *ngIf="totalUnidades() === 0" class="py-4 text-center text-[10px] font-bold text-slate-300 italic">
-          Sin productos seleccionados
-        </div>
+       <div *ngIf="totalUnidades() === 0" class="py-8 text-center flex flex-col items-center gap-2">
+  <span class="material-symbols-outlined text-slate-200 !text-4xl">shopping_cart</span>
+  <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">
+    El carrito está vacío
+  </span>
+</div>
       </div>
 
       <div class="space-y-4">

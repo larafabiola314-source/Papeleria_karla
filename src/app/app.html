@@ -1,1 +1,53 @@
+<div *ngIf="confirmService.visible()" 
+     class="fixed inset-0 z-[110] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
+  
+  <div class="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl border border-slate-100 mx-4">
+    <div class="flex flex-col items-center text-center gap-4">
+      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-500">
+        <span class="material-symbols-outlined !text-4xl">warning</span>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">¿Estás seguro?</h3>
+        <p class="text-sm font-medium text-slate-500 leading-relaxed">
+          {{ confirmService.mensaje() }}
+        </p>
+      </div>
+
+      <div class="flex w-full gap-3 pt-4">
+        <button (click)="confirmService.responder(false)" 
+                class="flex-1 rounded-2xl bg-slate-100 py-3 text-xs font-black text-slate-500 hover:bg-slate-200 transition-all uppercase tracking-widest">
+          Cancelar
+        </button>
+        <button (click)="confirmService.responder(true)" 
+                class="flex-1 rounded-2xl bg-vino-karla py-3 text-xs font-black text-white shadow-lg shadow-red-100 hover:scale-105 transition-all uppercase tracking-widest">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
+  <div *ngIf="notificacion()" 
+       [class]="'flex items-center gap-3 rounded-2xl p-4 shadow-2xl border-l-4 min-w-[300px] animate-slideIn ' + 
+                (notificacion().tipo === 'success' ? 'bg-white border-lila-karla' : 'bg-white border-red-500')">
+    
+    <div [class]="'flex h-10 w-10 items-center justify-center rounded-full ' + 
+                 (notificacion().tipo === 'success' ? 'bg-purple-50 text-lila-karla' : 'bg-red-50 text-red-500')">
+      <span class="material-symbols-outlined !text-2xl">
+        {{ notificacion().tipo === 'success' ? 'check_circle' : 'error' }}
+      </span>
+    </div>
+
+    <div class="flex flex-col text-left">
+      <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+        {{ notificacion().tipo === 'success' ? '¡Éxito!' : 'Atención' }}
+      </span>
+      <span class="text-sm font-bold text-slate-700">{{ notificacion().mensaje }}</span>
+    </div>
+  </div>
+</div>
+
 <router-outlet></router-outlet>

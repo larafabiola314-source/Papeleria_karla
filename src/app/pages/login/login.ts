@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
+import { NotificacionService } from '../../services/notificacion.service'; 
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,11 @@ import { finalize } from 'rxjs';
 export class Login {
   nombreUsuario = signal('');
   contrasenia = signal('');
-  mensajeError = signal('');
   cargando = signal(false);
 
   private servicioAuth = inject(Auth);
-  constructor(private router: Router) {}
+  private toast = inject(NotificacionService); // 2. Inyectar el servicio
+  private router = inject(Router); // Usando inject para mayor consistencia
 
   actualizarUsuario(evento: Event) {
     const elemento = evento.target as HTMLInputElement;
@@ -30,31 +31,39 @@ export class Login {
     this.contrasenia.set(elemento.value);
   }
 
-
   iniciarSesion(evento: Event) {
     evento.preventDefault();
-    this.mensajeError.set('');
+
+    // Validación básica antes de enviar
+    if (!this.nombreUsuario().trim() || !this.contrasenia().trim()) {
+      this.toast.mostrar('Por favor, ingresa tu usuario y contraseña', 'error');
+      return;
+    }
 
     if (this.cargando()) return;
 
-    this.mensajeError.set('');
     this.cargando.set(true);
     
     this.servicioAuth.validarUsuario(this.nombreUsuario(), this.contrasenia())
     .pipe(
-    finalize(() => this.cargando.set(false))
-  )
+      finalize(() => this.cargando.set(false))
+    )
     .subscribe({
       next: (respuesta) => {
         if (respuesta.status === 'success') {
           localStorage.setItem('usuario_logueado', JSON.stringify(respuesta.usuario));
+          
+          // Mensaje de bienvenida antes de redirigir
+          this.toast.mostrar(`¡Bienvenido(a), ${respuesta.usuario.Nombre}!`, 'success');
+          
           this.router.navigate(['/inicio']);
         } else {
-          this.mensajeError.set('Usuario o contraseña incorrectos. Verifica tus datos.');
+          // Reemplazamos el signal de error por un Toast
+          this.toast.mostrar('Usuario o contraseña incorrectos', 'error');
         }
       },
       error: () => {
-        this.mensajeError.set('Error de conexión');
+        this.toast.mostrar('Error de conexión con el servidor', 'error');
       }
     });
   }

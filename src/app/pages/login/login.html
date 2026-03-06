@@ -1,6 +1,6 @@
 <div class="min-h-screen flex items-center justify-center bg-lila-karla p-4 font-sans">
   
-  <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center transform transition-all">
+  <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center transform transition-all border border-white/20">
     
     <div class="mb-6 flex justify-center">
       <img src="img/logo.png" alt="Logo Papelería Karla" class="h-24 max-w-80 drop-shadow-lg">
@@ -8,49 +8,55 @@
 
     <h2 class="text-3xl font-black text-slate-800 tracking-tight">Papelería Karla</h2>
     
-    <div class="h-2 w-16 bg-lila-karla mx-auto my-4 rounded-full"></div>
+    <div class="h-1.5 w-12 bg-lila-karla mx-auto my-5 rounded-full shadow-sm shadow-purple-100"></div>
     
-    <p class="text-slate-500 font-medium mb-8">Ingresa tus datos para continuar</p>
-
-    <div class="mb-6 flex items-center justify-center gap-2 bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 text-sm font-bold" 
-         *ngIf="mensajeError()">
-      <span>⚠️</span> {{ mensajeError() }}
-    </div>
+    <p class="text-slate-400 font-bold text-xs uppercase tracking-[0.2em] mb-10">Panel de Administración</p>
 
     <form (submit)="iniciarSesion($event)" class="space-y-6 text-left">
-      <div class="space-y-2">
-        <label for="usuario" class="text-xs font-black text-slate-500 ml-1 uppercase tracking-wider">Usuario</label>
-        <input 
-          type="text" 
-          id="usuario" 
-          name="usuario"
-          placeholder="Nombre de usuario"
-          (input)="actualizarUsuario($event)"
-          class="w-full p-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-medium text-slate-700 placeholder:text-slate-300">
+      <div class="space-y-2 group">
+        <label for="usuario" class="text-[10px] font-black text-slate-400 ml-1 uppercase tracking-widest transition-colors group-focus-within:text-lila-karla">Usuario</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-lila-karla transition-colors">👤</span>
+          <input 
+            type="text" 
+            id="usuario" 
+            name="usuario"
+            placeholder="Escribe tu usuario"
+            (input)="actualizarUsuario($event)"
+            class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-50 rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300 placeholder:font-medium">
+        </div>
       </div>
 
-      <div class="space-y-2">
-        <label for="contrasenia" class="text-xs font-black text-slate-500 ml-1 uppercase tracking-wider">Contraseña</label>
-        <input 
-          type="password" 
-          id="contrasenia" 
-          name="contrasenia"
-          placeholder="••••••••"
-          (input)="actualizarPassword($event)"
-          class="w-full p-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-medium text-slate-700 placeholder:text-slate-300">
+      <div class="space-y-2 group">
+        <label for="contrasenia" class="text-[10px] font-black text-slate-400 ml-1 uppercase tracking-widest transition-colors group-focus-within:text-lila-karla">Contraseña</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-lila-karla transition-colors">🔑</span>
+          <input 
+            type="password" 
+            id="contrasenia" 
+            name="contrasenia"
+            placeholder="••••••••"
+            (input)="actualizarPassword($event)"
+            class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-50 rounded-2xl focus:border-lila-karla focus:bg-white outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300 placeholder:font-medium">
+        </div>
       </div>
 
       <button type="submit" 
-              class="w-full py-4 mt-4 bg-lila-karla hover:bg-vino-karla text-white font-black rounded-2xl transition-all shadow-lg shadow-purple-200 active:scale-95 disabled:bg-slate-300 disabled:cursor-not-allowed disabled:shadow-none"
+              class="w-full py-5 mt-6 bg-lila-karla hover:bg-vino-karla text-white font-black rounded-2xl transition-all shadow-xl shadow-purple-100 active:scale-95 disabled:bg-slate-200 disabled:shadow-none disabled:cursor-not-allowed group"
               [disabled]="cargando()">
         
-        <span *ngIf="!cargando()" class="tracking-wide">INICIAR SESIÓN</span>
+        <div *ngIf="!cargando()" class="flex items-center justify-center gap-2 tracking-widest uppercase text-sm">
+          ENTRAR AL SISTEMA
+          <span class="material-symbols-outlined !text-lg transition-transform group-hover:translate-x-1">login</span>
+        </div>
         
-        <span *ngIf="cargando()" class="flex items-center justify-center gap-3">
+        <div *ngIf="cargando()" class="flex items-center justify-center gap-3 text-sm font-black tracking-widest uppercase">
           <div class="h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-          ESPERA...
-        </span>
+          AUTENTICANDO...
+        </div>
       </button>
     </form>
+    
+
   </div>
 </div>

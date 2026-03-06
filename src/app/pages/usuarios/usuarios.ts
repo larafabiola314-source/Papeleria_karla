@@ -2,6 +2,8 @@ import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { Usuario } from '../../models/usuario';
+import { NotificacionService } from '../../services/notificacion.service';
+import { ConfirmacionService } from '../../services/confirmacion.service'; // 1. Importar el servicio
 
 @Component({
   selector: 'app-usuarios',
@@ -12,6 +14,8 @@ import { Usuario } from '../../models/usuario';
 })
 export class Usuarios implements OnInit {
   private servicioAuth = inject(Auth);
+  private toast = inject(NotificacionService);
+  private confirmar = inject(ConfirmacionService); // 2. Inyectar el servicio
 
   nombre = signal('');
   ap = signal('');
@@ -36,7 +40,7 @@ export class Usuarios implements OnInit {
   cargarUsuarios() {
     this.servicioAuth.obtenerUsuarios().subscribe({
       next: (res: Usuario[]) => this.listaUsuarios.set(res),
-      error: () => console.error('Error al cargar usuarios')
+      error: () => this.toast.mostrar('Error al cargar la lista de usuarios', 'error')
     });
   }
 
@@ -50,65 +54,63 @@ export class Usuarios implements OnInit {
       password: this.password().trim()
     };
 
-    // Validaciones
     if (!datosUsuario.nombre || !datosUsuario.ap || !datosUsuario.am || !datosUsuario.username) {
-      alert('Campos incompletos');
-      return;
-    }
-    // La contraseña es obligatoria si es un nuevo usuario
-    if (!this.idEditando() && !datosUsuario.password) {
-      alert('Se requiere contraseña para un nuevo usuario');
+      this.toast.mostrar('Por favor, completa todos los campos obligatorios', 'error');
       return;
     }
 
-    //contraseña de al menos 8 caracteres
-  if (!this.idEditando()) {
-    //registro
-    if (!datosUsuario.password) {
-      alert('se necesita contraseña para un nuevo usuario');
-      return;
+    if (!this.idEditando()) {
+      if (!datosUsuario.password) {
+        this.toast.mostrar('Se requiere una contraseña para el nuevo usuario', 'error');
+        return;
+      }
+      if (datosUsuario.password.length < 8) {
+        this.toast.mostrar('La contraseña debe tener al menos 8 caracteres', 'error');
+        return;
+      }
+    } else {
+      if (datosUsuario.password && datosUsuario.password.length < 8) {
+        this.toast.mostrar('La nueva contraseña debe tener al menos 8 caracteres', 'error');
+        return;
+      }
     }
-    if (datosUsuario.password.length < 8) {
-      alert('La contraseña debe tener al menos 8 caracteres');
-      return;
-    }
-  } else {
-    //editar
-    if (datosUsuario.password && datosUsuario.password.length < 8) {
-      alert('La nueva contraseña debe tener al menos 8 caracteres. Deja el campo en blanco sí no quieres cambiarla');
-      return;
-    }
-  }
 
     this.cargando.set(true);
 
     if (this.idEditando()) {
       this.servicioAuth.actualizarUsuario(datosUsuario).subscribe({
-        next: (res: any) => this.procesarRespuesta(res, 'Usuario actualizado'),
+        next: (res: any) => this.procesarRespuesta(res, '¡Usuario actualizado con éxito!'),
         error: () => this.procesarError()
       });
     } else {
       this.servicioAuth.guardarUsuario(datosUsuario).subscribe({
-        next: (res: any) => this.procesarRespuesta(res, 'Usuario guardado'),
+        next: (res: any) => this.procesarRespuesta(res, '¡Usuario registrado correctamente!'),
         error: () => this.procesarError()
       });
     }
   }
 
-  eliminarUsuario(id: number) {
+  // 3. Convertir a async y usar el modal lila
+  async eliminarUsuario(id: number) {
     if (id === this.idUsuarioLogueado()) {
-      alert('No puedes eliminar tu cuenta mientras estás en sesión.');
+      this.toast.mostrar('No puedes eliminar tu propia cuenta en sesión', 'error');
       return;
     }
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+
+    const acepto = await this.confirmar.preguntar(
+      '¿Estás seguro de que deseas eliminar a este empleado? Esta acción es permanente y el usuario perderá acceso al sistema.'
+    );
+
+    if (acepto) {
       this.cargando.set(true);
       this.servicioAuth.eliminarUsuario(id).subscribe({
         next: (res: any) => {
           this.cargando.set(false);
           if (res.status === 'success') {
+            this.toast.mostrar('Usuario eliminado del sistema', 'success');
             this.cargarUsuarios();
           } else {
-            alert('Error: ' + res.message);
+            this.toast.mostrar('Error: ' + res.message, 'error');
           }
         },
         error: () => this.procesarError()
@@ -119,17 +121,17 @@ export class Usuarios implements OnInit {
   procesarRespuesta(res: any, mensajeExito: string) {
     this.cargando.set(false);
     if (res.status === 'success') {
-      alert(mensajeExito);
+      this.toast.mostrar(mensajeExito, 'success');
       this.limpiarCampos();
       this.cargarUsuarios();
     } else {
-      alert('Error: ' + res.message);
+      this.toast.mostrar('Error: ' + res.message, 'error');
     }
   }
 
   procesarError() {
     this.cargando.set(false);
-    alert('Error de conexión con el servidor');
+    this.toast.mostrar('Error de conexión con el servidor PHP', 'error');
   }
 
   limpiarCampos() {
@@ -150,7 +152,6 @@ export class Usuarios implements OnInit {
     this.password.set('');
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.toast.mostrar('Editando datos de: ' + usuario.Nombre, 'success');
   }
-
-  
 }
