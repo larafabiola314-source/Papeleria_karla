@@ -83,11 +83,24 @@
                   </span>
                 </div>
               </td>
-              <td class="p-4 text-center">
-                <div class="flex justify-center gap-4">
-                  <button (click)="prepararEdicion(p)" class="text-xs font-black text-lila-karla hover:text-vino-karla transition-colors">EDITAR</button>
-                  <button (click)="darDeBaja(p.Id_Producto)" class="text-xs font-black text-red-400 hover:text-red-600 transition-colors">BAJA</button>
-                </div>
+             <td class="p-4 text-center">
+               <div class="flex justify-center items-center gap-2">
+                 <button (click)="prepararEdicion(p)" 
+                         class="group relative flex h-9 w-9 items-center justify-center rounded-full transition-all hover:bg-purple-50 active:scale-90"
+                         title="Editar producto">
+                   <span class="material-symbols-outlined !text-xl text-lila-karla group-hover:text-vino-karla">
+                     edit_square
+                   </span>
+                 </button>
+               
+                 <button (click)="darDeBaja(p.Id_Producto)" 
+                         class="group relative flex h-9 w-9 items-center justify-center rounded-full transition-all hover:bg-red-50 active:scale-90"
+                         title="Dar de baja">
+                   <span class="material-symbols-outlined !text-xl text-red-400 group-hover:text-red-600">
+                     delete
+                   </span>
+                 </button>
+               </div>
               </td>
             </tr>
           </tbody>
