@@ -1,6 +1,7 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../../services/auth';
+import { ProductoService } from '../../services/producto.service'; // Nuevo [cite: 2026-02-21]
+import { VentaService } from '../../services/venta.service'; // Nuevo [cite: 2026-02-21]
 import { Producto } from '../../models/producto';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ConfirmacionService } from '../../services/confirmacion.service'; 
@@ -14,15 +15,16 @@ export interface ProductoVenta extends Producto {
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './ventas.html',
   styleUrl: './ventas.css'
 })
 export class Ventas implements OnInit {
 
   private notificacion = inject(NotificacionService);
-  private servicioAuth = inject(Auth);
-  private confirmar = inject(ConfirmacionService); // 2. Inyectar servicio
+  private productoService = inject(ProductoService); // Inyectamos servicio de productos [cite: 2026-02-21]
+  private ventaService = inject(VentaService); // Inyectamos servicio de ventas [cite: 2026-02-21]
+  private confirmar = inject(ConfirmacionService);
 
   listaProductos = signal<ProductoVenta[]>([]);
   terminoBusqueda = signal('');
@@ -33,10 +35,11 @@ export class Ventas implements OnInit {
   }
 
   cargarInventario() {
-    this.servicioAuth.obtenerProductos().subscribe({
+    this.productoService.obtenerProductos().subscribe({
       next: (res: Producto[]) => {
+        // Ajustamos a p.stock (minúscula) [cite: 2025-11-30]
         const productosConCantidad = res.map(p => ({ ...p, cantidad: 0,
-          opcionesStock: Array.from({ length: p.Stock + 1 }, (_, i) => i) 
+          opcionesStock: Array.from({ length: (p.stock || 0) + 1 }, (_, i) => i) 
       }));
         this.listaProductos.set(productosConCantidad);
       },
@@ -45,7 +48,8 @@ export class Ventas implements OnInit {
   }
 
   totalVenta = computed(() => {
-    return this.listaProductos().reduce((total, p) => total + (p.Precio * p.cantidad), 0);
+    // Ajustamos a p.precio (minúscula) [cite: 2025-11-30]
+    return this.listaProductos().reduce((total, p) => total + (p.precio * p.cantidad), 0);
   });
 
   totalUnidades = computed(() => {
@@ -56,8 +60,9 @@ export class Ventas implements OnInit {
     const termino = this.terminoBusqueda().toLowerCase();
     const productos = this.listaProductos();
 
+    // Ajustamos a p.nombre (minúscula) [cite: 2025-11-30]
     const filtrados = productos.filter(p => 
-      p.Nombre.toLowerCase().includes(termino)
+      p.nombre.toLowerCase().includes(termino)
     );
 
     return filtrados.sort((a, b) => {
@@ -71,7 +76,8 @@ export class Ventas implements OnInit {
     const nuevaCantidad = parseInt(evento.target.value, 10);
     this.listaProductos.update(productos => 
       productos.map(p => {
-        if (p.Id_Producto === productoId) {
+        // Ajustamos a p.id (minúscula) [cite: 2025-11-30]
+        if (p.id === productoId) {
           return { ...p, cantidad: nuevaCantidad };
         }
         return p;
@@ -81,71 +87,60 @@ export class Ventas implements OnInit {
 
   cambiarCantidadManual(producto: any, cambio: number) {
     const nuevaCantidad = producto.cantidad + cambio;
-    if (nuevaCantidad >= 0 && nuevaCantidad <= producto.Stock) {
-      this.cambiarCantidad(producto.Id_Producto, { target: { value: nuevaCantidad } });
+    if (nuevaCantidad >= 0 && nuevaCantidad <= producto.stock) {
+      this.cambiarCantidad(producto.id, { target: { value: nuevaCantidad } });
     }
   }
 
-
   validarStockDinamico(producto: any) {
-  // Si el usuario borra el número, lo tratamos como 0 temporalmente
-  if (producto.cantidad === null || producto.cantidad === undefined) {
-    return; 
-  }
+    if (producto.cantidad === null || producto.cantidad === undefined) return; 
 
-  // Si intenta poner más de lo que hay
-  if (producto.cantidad > producto.Stock) {
-    producto.cantidad = producto.Stock;
-    this.notificacion.mostrar(`Stock máximo alcanzado (${producto.Stock} unidades)`, 'error');
-  }
+    if (producto.cantidad > producto.stock) {
+      producto.cantidad = producto.stock;
+      this.notificacion.mostrar(`Stock máximo alcanzado (${producto.stock} unidades)`, 'error');
+    }
 
-  // Si pone números negativos
-  if (producto.cantidad < 0) {
-    producto.cantidad = 0;
+    if (producto.cantidad < 0) producto.cantidad = 0;
   }
-}
 
   validarEntradaTeclado(producto: any, evento: any) {
-  let valor = parseInt(evento.target.value, 10);
+    let valor = parseInt(evento.target.value, 10);
+    if (isNaN(valor) || valor < 0) valor = 0;
 
-  // Si el campo queda vacío o no es un número, lo ponemos en 0
-  if (isNaN(valor) || valor < 0) {
-    valor = 0;
+    if (valor > producto.stock) {
+      valor = producto.stock;
+      this.notificacion.mostrar(`Solo hay ${producto.stock} unidades disponibles de ${producto.nombre}`, 'error');
+    }
+
+    this.cambiarCantidad(producto.id, { target: { value: valor } });
   }
-
-  // Si intenta escribir más del stock disponible
-  if (valor > producto.Stock) {
-    valor = producto.Stock; // Forzamos al máximo disponible
-    this.notificacion.mostrar(`Solo hay ${producto.Stock} unidades disponibles de ${producto.Nombre}`, 'error');
-  }
-
-  // Actualizamos el signal de la lista
-  this.cambiarCantidad(producto.Id_Producto, { target: { value: valor } });
-}
 
   realizarVenta() {
     const productosVenta = this.listaProductos()
       .filter(p => p.cantidad > 0)
       .map(p => ({
-        id_producto: p.Id_Producto,
+        id_producto: p.id,
         cantidad: p.cantidad,
-        precio: p.Precio,
-        subtotal: p.Precio * p.cantidad
+        precio: p.precio,
+        subtotal: p.precio * p.cantidad
       }));
 
     if (productosVenta.length === 0) return;
+    
     const datosUsuario = localStorage.getItem('usuario_logueado');
-    const idUsuario = datosUsuario ? JSON.parse(datosUsuario).Id_Usuario : 1; 
+    // Ajustamos a .id (minúscula) del objeto guardado en login [cite: 2025-11-23]
+    const idUsuario = datosUsuario ? JSON.parse(datosUsuario).id : 1; 
 
     const payload = {
-      id_usuario: idUsuario,
+      user_id: idUsuario, // Cambiado a user_id para coincidir con la migración de Laravel
       total: this.totalVenta(),
       productos: productosVenta
     };
 
     this.cargando.set(true);
 
-    this.servicioAuth.registrarVenta(payload).subscribe({
+    // Usamos el nuevo ventaService [cite: 2026-02-21]
+    this.ventaService.registrarVenta(payload).subscribe({
       next: (res: any) => {
         this.cargando.set(false);
         if (res.status === 'success') {
@@ -163,10 +158,9 @@ export class Ventas implements OnInit {
     });
   }
 
-  // 3. Convertir a async y usar el modal personalizado
   async cancelarVenta() {
     const seguro = await this.confirmar.preguntar(
-      '¿Seguro que deseas cancelar la venta actual? Se vaciarán todos los productos seleccionados.'
+      '¿Seguro que deseas cancelar la venta actual?'
     );
 
     if (seguro) {

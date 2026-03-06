@@ -1,6 +1,6 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../../services/auth';
+import { Auth } from '../../services/auth.service';
 import { Usuario } from '../../models/usuario';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ConfirmacionService } from '../../services/confirmacion.service'; // 1. Importar el servicio
