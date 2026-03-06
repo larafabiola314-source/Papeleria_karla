@@ -83,6 +83,15 @@ cambiarCantidad(productoId: number, evento: any) {
   );
 }
 
+cambiarCantidadManual(producto: any, cambio: number) {
+  const nuevaCantidad = producto.cantidad + cambio;
+  
+  // Validamos que no sea menor a 0 ni mayor al stock disponible [cite: 2025-11-30]
+  if (nuevaCantidad >= 0 && nuevaCantidad <= producto.Stock) {
+    this.cambiarCantidad(producto.Id_Producto, { target: { value: nuevaCantidad } });
+  }
+}
+
 realizarVenta() {
   const productosVenta = this.listaProductos()
     .filter(p => p.cantidad > 0)
