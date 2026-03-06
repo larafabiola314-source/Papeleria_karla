@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { Producto } from '../../models/producto';
 import { NotificacionService } from '../../services/notificacion.service';
-import { ConfirmacionService } from '../../services/confirmacion.service'; // 1. Importar servicio
+import { ConfirmacionService } from '../../services/confirmacion.service'; 
+import { FormsModule } from '@angular/forms';
 
 export interface ProductoVenta extends Producto {
   cantidad: number;
@@ -13,7 +14,7 @@ export interface ProductoVenta extends Producto {
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './ventas.html',
   styleUrl: './ventas.css'
 })
@@ -84,6 +85,43 @@ export class Ventas implements OnInit {
       this.cambiarCantidad(producto.Id_Producto, { target: { value: nuevaCantidad } });
     }
   }
+
+
+  validarStockDinamico(producto: any) {
+  // Si el usuario borra el número, lo tratamos como 0 temporalmente
+  if (producto.cantidad === null || producto.cantidad === undefined) {
+    return; 
+  }
+
+  // Si intenta poner más de lo que hay
+  if (producto.cantidad > producto.Stock) {
+    producto.cantidad = producto.Stock;
+    this.notificacion.mostrar(`Stock máximo alcanzado (${producto.Stock} unidades)`, 'error');
+  }
+
+  // Si pone números negativos
+  if (producto.cantidad < 0) {
+    producto.cantidad = 0;
+  }
+}
+
+  validarEntradaTeclado(producto: any, evento: any) {
+  let valor = parseInt(evento.target.value, 10);
+
+  // Si el campo queda vacío o no es un número, lo ponemos en 0
+  if (isNaN(valor) || valor < 0) {
+    valor = 0;
+  }
+
+  // Si intenta escribir más del stock disponible
+  if (valor > producto.Stock) {
+    valor = producto.Stock; // Forzamos al máximo disponible
+    this.notificacion.mostrar(`Solo hay ${producto.Stock} unidades disponibles de ${producto.Nombre}`, 'error');
+  }
+
+  // Actualizamos el signal de la lista
+  this.cambiarCantidad(producto.Id_Producto, { target: { value: valor } });
+}
 
   realizarVenta() {
     const productosVenta = this.listaProductos()
