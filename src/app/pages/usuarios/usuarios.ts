@@ -1,9 +1,9 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../../services/auth.service';
+import { UsuarioService } from '../../services/usuario.service'; //
 import { Usuario } from '../../models/usuario';
 import { NotificacionService } from '../../services/notificacion.service';
-import { ConfirmacionService } from '../../services/confirmacion.service'; // 1. Importar el servicio
+import { ConfirmacionService } from '../../services/confirmacion.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -13,10 +13,11 @@ import { ConfirmacionService } from '../../services/confirmacion.service'; // 1.
   styleUrl: './usuarios.css'
 })
 export class Usuarios implements OnInit {
-  private servicioAuth = inject(Auth);
+  // Inyectamos el servicio especializado
+  private usuarioService = inject(UsuarioService);
   private toast = inject(NotificacionService);
-  private confirmar = inject(ConfirmacionService); // 2. Inyectar el servicio
-
+  private confirmar = inject(ConfirmacionService);
+  
   nombre = signal('');
   ap = signal('');
   am = signal('');
@@ -26,19 +27,21 @@ export class Usuarios implements OnInit {
   cargando = signal(false);
   idEditando = signal<number | null>(null);
   idUsuarioLogueado = signal<number>(0);
+  role = signal<'admin' | 'user'>('user');
 
   ngOnInit() {
     const datosUsuario = localStorage.getItem('usuario_logueado');
     if (datosUsuario) {
       const usuarioParseado = JSON.parse(datosUsuario);
-      const idReal = usuarioParseado.Id_Usuario || usuarioParseado.id_usuario || usuarioParseado.id;
+      // Laravel devuelve 'id' en minúsculas
+      const idReal = usuarioParseado.id; 
       this.idUsuarioLogueado.set(Number(idReal));
     }
     this.cargarUsuarios();
   }
 
   cargarUsuarios() {
-    this.servicioAuth.obtenerUsuarios().subscribe({
+    this.usuarioService.obtenerUsuarios().subscribe({
       next: (res: Usuario[]) => this.listaUsuarios.set(res),
       error: () => this.toast.mostrar('Error al cargar la lista de usuarios', 'error')
     });
@@ -51,7 +54,8 @@ export class Usuarios implements OnInit {
       ap: this.ap().trim(),
       am: this.am().trim(),
       username: this.username().trim(),
-      password: this.password().trim()
+      password: this.password().trim(),
+      role: this.role() 
     };
 
     if (!datosUsuario.nombre || !datosUsuario.ap || !datosUsuario.am || !datosUsuario.username) {
@@ -59,59 +63,38 @@ export class Usuarios implements OnInit {
       return;
     }
 
-    if (!this.idEditando()) {
-      if (!datosUsuario.password) {
-        this.toast.mostrar('Se requiere una contraseña para el nuevo usuario', 'error');
-        return;
-      }
-      if (datosUsuario.password.length < 8) {
-        this.toast.mostrar('La contraseña debe tener al menos 8 caracteres', 'error');
-        return;
-      }
-    } else {
-      if (datosUsuario.password && datosUsuario.password.length < 8) {
-        this.toast.mostrar('La nueva contraseña debe tener al menos 8 caracteres', 'error');
-        return;
-      }
+    // Validaciones de contraseña
+    if (!this.idEditando() && (!datosUsuario.password || datosUsuario.password.length < 8)) {
+      this.toast.mostrar('La contraseña debe tener al menos 8 caracteres', 'error');
+      return;
     }
 
     this.cargando.set(true);
 
-    if (this.idEditando()) {
-      this.servicioAuth.actualizarUsuario(datosUsuario).subscribe({
-        next: (res: any) => this.procesarRespuesta(res, '¡Usuario actualizado con éxito!'),
-        error: () => this.procesarError()
-      });
-    } else {
-      this.servicioAuth.guardarUsuario(datosUsuario).subscribe({
-        next: (res: any) => this.procesarRespuesta(res, '¡Usuario registrado correctamente!'),
-        error: () => this.procesarError()
-      });
-    }
+    // Usamos el método unificado guardarUsuario (POST o PUT)
+    this.usuarioService.guardarUsuario(datosUsuario).subscribe({
+      next: (res: any) => this.procesarRespuesta(res, this.idEditando() ? '¡Usuario actualizado!' : '¡Usuario registrado!'),
+      error: () => this.procesarError()
+    });
   }
 
-  // 3. Convertir a async y usar el modal lila
   async eliminarUsuario(id: number) {
     if (id === this.idUsuarioLogueado()) {
-      this.toast.mostrar('No puedes eliminar tu propia cuenta en sesión', 'error');
+      this.toast.mostrar('No puedes eliminar tu propia cuenta', 'error');
       return;
     }
 
     const acepto = await this.confirmar.preguntar(
-      '¿Estás seguro de que deseas eliminar a este empleado? Esta acción es permanente y el usuario perderá acceso al sistema.'
+      '¿Estás seguro de que deseas eliminar a este empleado?'
     );
 
     if (acepto) {
       this.cargando.set(true);
-      this.servicioAuth.eliminarUsuario(id).subscribe({
+      this.usuarioService.eliminarUsuario(id).subscribe({
         next: (res: any) => {
           this.cargando.set(false);
-          if (res.status === 'success') {
-            this.toast.mostrar('Usuario eliminado del sistema', 'success');
-            this.cargarUsuarios();
-          } else {
-            this.toast.mostrar('Error: ' + res.message, 'error');
-          }
+          this.toast.mostrar('Usuario eliminado del sistema', 'success');
+          this.cargarUsuarios();
         },
         error: () => this.procesarError()
       });
@@ -120,18 +103,14 @@ export class Usuarios implements OnInit {
 
   procesarRespuesta(res: any, mensajeExito: string) {
     this.cargando.set(false);
-    if (res.status === 'success') {
-      this.toast.mostrar(mensajeExito, 'success');
-      this.limpiarCampos();
-      this.cargarUsuarios();
-    } else {
-      this.toast.mostrar('Error: ' + res.message, 'error');
-    }
+    this.toast.mostrar(mensajeExito, 'success');
+    this.limpiarCampos();
+    this.cargarUsuarios();
   }
 
   procesarError() {
     this.cargando.set(false);
-    this.toast.mostrar('Error de conexión con el servidor PHP', 'error');
+    this.toast.mostrar('Error de conexión con Laravel', 'error');
   }
 
   limpiarCampos() {
@@ -141,17 +120,20 @@ export class Usuarios implements OnInit {
     this.am.set('');
     this.username.set('');
     this.password.set('');
+    this.role.set('user');
   }
 
   prepararEdicion(usuario: Usuario) {
-    this.idEditando.set(usuario.Id_Usuario);
-    this.nombre.set(usuario.Nombre);
-    this.ap.set(usuario.AP);
-    this.am.set(usuario.AM);
-    this.username.set(usuario.Username);
+    // Sincronizamos con las propiedades en minúsculas del modelo
+    this.idEditando.set(usuario.id);
+    this.nombre.set(usuario.nombre);
+    this.ap.set(usuario.ap);
+    this.am.set(usuario.am);
+    this.username.set(usuario.username);
     this.password.set('');
+    this.role.set(usuario.role);
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.toast.mostrar('Editando datos de: ' + usuario.Nombre, 'success');
+    this.toast.mostrar('Editando datos de: ' + usuario.nombre, 'success');
   }
 }

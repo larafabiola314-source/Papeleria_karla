@@ -43,6 +43,15 @@
                class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
       </div>
 
+      <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Rol del Usuario</label>
+        <select [value]="role()" (change)="role.set($any($event.target).value)"
+                class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white appearance-none cursor-pointer">
+          <option value="user">Empleado (Ventas)</option>
+          <option value="admin">Administrador (Control Total)</option>
+        </select>
+      </div>
+
       <div class="flex items-end gap-3 lg:col-span-1">
         <button (click)="limpiarCampos()" [disabled]="cargando()"
                 class="flex-1 rounded-2xl bg-slate-100 py-3 text-xs font-black text-slate-500 transition-all hover:bg-slate-200 active:scale-95 disabled:opacity-50">
@@ -69,20 +78,27 @@
             <th class="p-4 pl-8">ID</th>
             <th class="p-4">Nombre Completo</th>
             <th class="p-4">Username</th>
+            <th class="p-4">Rol</th>
             <th class="p-4">Registro</th>
             <th class="p-4 pr-8 text-right">Acciones</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50">
           <tr *ngFor="let u of listaUsuarios()" class="group transition-colors hover:bg-slate-50/50">
-            <td class="p-4 pl-8 text-xs font-bold text-slate-400">#{{ u.Id_Usuario }}</td>
-            <td class="p-4 text-sm font-black text-slate-800">{{ u.Nombre }} {{ u.AP }} {{ u.AM }}</td>
+            <td class="p-4 pl-8 text-xs font-bold text-slate-400">#{{ u.id }}</td>
+            <td class="p-4 text-sm font-black text-slate-800">{{ u.nombre }} {{ u.ap }} {{ u.am }}</td>
             <td class="p-4">
               <span class="rounded-lg bg-purple-50 px-2 py-1 text-xs font-bold text-lila-karla">
-                @{{ u.Username }}
+                @{{ u.username }}
               </span>
             </td>
-            <td class="p-4 text-xs font-medium text-slate-400">{{ u.Created_at | date:'dd/MM/yyyy' }}</td>
+            <td class="p-4">
+              <span [class]="u.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'"
+                    class="rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-tighter">
+                {{ u.role === 'admin' ? 'Administrador' : 'Empleado' }}
+              </span>
+            </td>
+            <td class="p-4 text-xs font-medium text-slate-400">{{ u.created_at | date:'dd/MM/yyyy' }}</td>
             <td class="p-4 pr-8 text-right">
               <div class="flex justify-end items-center gap-2">
                 <button (click)="prepararEdicion(u)" 
@@ -93,9 +109,9 @@
                   </span>
                 </button>
                 
-                <button (click)="eliminarUsuario(u.Id_Usuario)"
-                        [disabled]="u.Id_Usuario === idUsuarioLogueado()"
-                        [title]="u.Id_Usuario === idUsuarioLogueado() ? 'No puedes eliminar tu propia cuenta' : 'Eliminar usuario'"
+                <button (click)="eliminarUsuario(u.id)"
+                        [disabled]="u.id === idUsuarioLogueado()"
+                        [title]="u.id === idUsuarioLogueado() ? 'No puedes eliminar tu propia cuenta' : 'Eliminar usuario'"
                         class="group relative flex h-9 w-9 items-center justify-center rounded-full transition-all hover:bg-red-50 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent">
                   <span class="material-symbols-outlined !text-xl text-red-400 group-hover:text-red-600">
                     person_remove

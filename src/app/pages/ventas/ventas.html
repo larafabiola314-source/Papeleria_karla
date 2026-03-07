@@ -25,39 +25,39 @@
           <tbody class="divide-y divide-slate-50">
             <tr *ngFor="let p of productosFiltrados()" class="transition-colors hover:bg-slate-50/50" [class.bg-purple-50/40]="p.cantidad > 0">
               <td class="p-4">
-                <div class="text-sm font-bold text-slate-800">{{ p.Nombre }}</div>
-                <div class="text-[10px] font-bold text-slate-400 uppercase">Stock: {{ p.Stock }}</div>
+                <div class="text-sm font-bold text-slate-800">{{ p.nombre }}</div>
+                <div class="text-[10px] font-bold text-slate-400 uppercase">Stock: {{ p.stock }}</div>
               </td>
-              <td class="p-4 text-sm font-medium text-slate-500">${{ p.Precio | number:'1.2-2' }}</td>
-             <td class="p-4">
-            <div class="flex items-center justify-center gap-2">
-              <button (click)="cambiarCantidadManual(p, -1)" [disabled]="p.cantidad <= 0"
-                      class="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-500 transition-all disabled:opacity-20 active:scale-90">
-                <span class="material-symbols-outlined !text-sm">remove</span>
-              </button>
-            
-              <input 
-                type="number" 
-               [(ngModel)]="p.cantidad"
-                (ngModelChange)="validarStockDinamico(p)"
-                min="0" 
-                [max]="p.Stock"
-                class="w-12 text-center text-sm font-black bg-slate-50 border-none rounded-lg p-1 outline-none focus:ring-2 focus:ring-lila-karla transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                [class.text-lila-karla]="p.cantidad > 0">
-            
-              <button (click)="cambiarCantidadManual(p, 1)" [disabled]="p.cantidad >= p.Stock"
-                      class="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-emerald-50 hover:text-emerald-500 transition-all disabled:opacity-20 active:scale-90">
-                <span class="material-symbols-outlined !text-sm">add</span>
-              </button>
-            </div>
-            
-            <div *ngIf="p.Stock > 0 && p.Stock <= 5" class="mt-1 text-center text-[8px] font-black text-orange-400 uppercase tracking-tighter">
-              ⚠️ Stock Bajo
-            </div>
-            <div *ngIf="p.Stock === 0" class="mt-1 text-center text-[9px] font-black text-red-500 uppercase">Agotado</div>
-          </td>
+              <td class="p-4 text-sm font-medium text-slate-500">${{ p.precio | number:'1.2-2' }}</td>
+              <td class="p-4">
+                <div class="flex items-center justify-center gap-2">
+                  <button (click)="cambiarCantidadManual(p, -1)" [disabled]="p.cantidad <= 0"
+                          class="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-500 transition-all disabled:opacity-20 active:scale-90">
+                    <span class="material-symbols-outlined !text-sm">remove</span>
+                  </button>
+                
+                  <input 
+                    type="number" 
+                    [(ngModel)]="p.cantidad"
+                    (ngModelChange)="validarStockDinamico(p)"
+                    min="0" 
+                    [max]="p.stock" 
+                    class="w-12 text-center text-sm font-black bg-slate-50 border-none rounded-lg p-1 outline-none focus:ring-2 focus:ring-lila-karla transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    [class.text-lila-karla]="p.cantidad > 0">
+                
+                  <button (click)="cambiarCantidadManual(p, 1)" [disabled]="p.cantidad >= p.stock"
+                          class="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-emerald-50 hover:text-emerald-500 transition-all disabled:opacity-20 active:scale-90">
+                    <span class="material-symbols-outlined !text-sm">add</span>
+                  </button>
+                </div>
+                
+                <div *ngIf="p.stock > 0 && p.stock <= 5" class="mt-1 text-center text-[8px] font-black text-orange-400 uppercase tracking-tighter">
+                  ⚠️ Stock Bajo
+                </div>
+                <div *ngIf="p.stock === 0" class="mt-1 text-center text-[9px] font-black text-red-500 uppercase">Agotado</div>
+              </td>
               <td class="p-4 text-right text-sm font-black" [class.text-lila-karla]="p.cantidad > 0" [class.text-slate-200]="p.cantidad === 0">
-                ${{ (p.Precio * p.cantidad) | number:'1.2-2' }}
+                ${{ (p.precio * p.cantidad) | number:'1.2-2' }}
               </td>
             </tr>
           </tbody>
@@ -74,18 +74,18 @@
         <div *ngFor="let p of productosFiltrados()">
             <div *ngIf="p.cantidad > 0" class="flex justify-between items-center animate-fadeIn">
               <div class="flex flex-col">
-                <span class="text-xs font-bold text-slate-700 leading-tight">{{ p.Nombre }}</span>
-                <span class="text-[10px] text-slate-400">{{ p.cantidad }} x ${{ p.Precio }}</span>
+                <span class="text-xs font-bold text-slate-700 leading-tight">{{ p.nombre }}</span>
+                <span class="text-[10px] text-slate-400">{{ p.cantidad }} x ${{ p.precio }}</span>
               </div>
-              <span class="text-xs font-black text-lila-karla">${{ (p.Precio * p.cantidad) | number:'1.2-2' }}</span>
+              <span class="text-xs font-black text-lila-karla">${{ (p.precio * p.cantidad) | number:'1.2-2' }}</span>
             </div>
         </div>
-       <div *ngIf="totalUnidades() === 0" class="py-8 text-center flex flex-col items-center gap-2">
-  <span class="material-symbols-outlined text-slate-200 !text-4xl">shopping_cart</span>
-  <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">
-    El carrito está vacío
-  </span>
-</div>
+        <div *ngIf="totalUnidades() === 0" class="py-8 text-center flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-slate-200 !text-4xl">shopping_cart</span>
+          <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">
+            El carrito está vacío
+          </span>
+        </div>
       </div>
 
       <div class="space-y-4">

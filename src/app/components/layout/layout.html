@@ -21,7 +21,8 @@
        class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">sell</span> Ventas
     </a>
-    <a routerLink="/usuarios" routerLinkActive="!bg-lila-karla !text-white shadow-md"
+    
+    <a *ngIf="rolUsuario() === 'admin'" routerLink="/usuarios" routerLinkActive="!bg-lila-karla !text-white shadow-md"
        class="flex items-center gap-2 px-8 py-4 text-sm font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-lila-karla md:rounded-xl md:px-4 md:py-2">
       <span class="material-symbols-outlined">group</span> Usuarios
     </a>
@@ -47,12 +48,14 @@
     </div>
   </div>
 </header>
+
 <div class="border-b-2 border-gray-100 bg-white px-8 py-10 md:px-12">
   <div class="flex items-center gap-4">
     <div class="rounded-2xl bg-purple-50 p-3 text-lila-karla">
       <span class="material-symbols-outlined !text-4xl">
-        {{ tituloPagina === 'Inventario' ? 'inventory_2' : 
-           tituloPagina === 'Ventas' ? 'payments' : 'dashboard' }}
+        {{ tituloPagina.includes('INVENTARIO') ? 'inventory_2' : 
+           tituloPagina.includes('VENTA') ? 'payments' : 
+           tituloPagina.includes('PERSONAL') ? 'group' : 'dashboard' }}
       </span>
     </div>
     <div>
@@ -66,9 +69,4 @@
   <div class="mx-auto max-w-7xl px-6 md:px-10">
     <router-outlet></router-outlet>
   </div>
-
-
-  
-
-  
 </main>

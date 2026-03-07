@@ -33,21 +33,28 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5">
         <span class="text-xs font-black text-lila-karla">DÍA</span>
-        <div class="text-2xl font-black text-purple-700">{{ ventasDia() }}</div>
+        <div class="text-2xl font-black text-purple-500">{{ ventasDia() }}</div>
       </div>
       <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5">
         <span class="text-xs font-black text-lila-karla">SEMANA</span>
-        <div class="text-2xl font-black text-purple-700">{{ ventasSemana() }}</div>
+        <div class="text-2xl font-black text-purple-500">{{ ventasSemana() }}</div>
       </div>
       <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5">
         <span class="text-xs font-black text-lila-karla">MES</span>
-        <div class="text-2xl font-black text-purple-700">{{ ventasMes() }}</div>
+        <div class="text-2xl font-black text-purple-500">{{ ventasMes() }}</div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2 class="mb-4 text-lg font-black text-slate-800">Ultimas Ventas Registradas 🖋️</h2>
+
+    <h2 class="mb-4 flex items-center gap-2 text-lg font-black text-slate-800">
+      Ultimas Ventas Registradas
+      <span class="material-symbols-outlined text-lila-karla !text-xl">
+        history_edu
+      </span>
+    </h2>
+
     <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
       <div class="max-h-96 overflow-y-auto">
         <table class="w-full border-collapse text-left">
@@ -60,9 +67,9 @@
           </thead>
           <tbody class="divide-y divide-slate-50">
             <tr *ngFor="let v of ultimasVentas()" class="transition-colors hover:bg-slate-50/50">
-              <td class="p-4 font-black text-emerald-600">${{ v.Total | number:'1.2-2' }}</td>
-              <td class="p-4 text-sm font-semibold text-slate-700">{{ v.Empleado }}</td>
-              <td class="p-4 text-right text-xs font-medium text-slate-400">{{ v.Fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="p-4 font-black text-emerald-600">${{ v.total | number:'1.2-2' }}</td>
+              <td class="p-4 text-sm font-semibold text-slate-700">{{ v.user?.nombre || 'S/N' }}</td>
+              <td class="p-4 text-right text-xs font-medium text-slate-400">{{ v.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
             </tr>
             <tr *ngIf="ultimasVentas().length === 0">
               <td colspan="3" class="p-10 text-center text-sm font-medium text-slate-400 italic">
