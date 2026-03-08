@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service'; //
@@ -8,7 +9,7 @@ import { ConfirmacionService } from '../../services/confirmacion.service';
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css'
 })
@@ -28,6 +29,7 @@ export class Usuarios implements OnInit {
   idEditando = signal<number | null>(null);
   idUsuarioLogueado = signal<number>(0);
   role = signal<'admin' | 'user'>('user');
+  email = signal('');
 
   ngOnInit() {
     const datosUsuario = localStorage.getItem('usuario_logueado');
@@ -54,11 +56,12 @@ export class Usuarios implements OnInit {
       ap: this.ap().trim(),
       am: this.am().trim(),
       username: this.username().trim(),
+      email: this.email().trim(),
       password: this.password().trim(),
       role: this.role() 
     };
 
-    if (!datosUsuario.nombre || !datosUsuario.ap || !datosUsuario.am || !datosUsuario.username) {
+    if (!datosUsuario.nombre || !datosUsuario.ap || !datosUsuario.am || !datosUsuario.username || !datosUsuario.email) {
       this.toast.mostrar('Por favor, completa todos los campos obligatorios', 'error');
       return;
     }
@@ -119,6 +122,7 @@ export class Usuarios implements OnInit {
     this.ap.set('');
     this.am.set('');
     this.username.set('');
+    this.email.set(''),
     this.password.set('');
     this.role.set('user');
   }
@@ -130,6 +134,7 @@ export class Usuarios implements OnInit {
     this.ap.set(usuario.ap);
     this.am.set(usuario.am);
     this.username.set(usuario.username);
+    this.email.set(usuario.email);
     this.password.set('');
     this.role.set(usuario.role);
     

@@ -7,10 +7,14 @@ import { Usuarios } from './pages/usuarios/usuarios';
 import { Login } from './pages/login/login';
 import { Layout } from './components/layout/layout';
 import { authGuard } from './guards/auth-guard';
+import { SolicitarReset } from './pages/solicitar-reset/solicitar-reset';
+import { ResetPassword } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
   // login sin el menu de arriba
   { path: 'login', component: Login },
+  { path: 'solicitar-reset', component: SolicitarReset },
+  { path: 'reset-password', component: ResetPassword },
 
   // Rutas con menú 
   {

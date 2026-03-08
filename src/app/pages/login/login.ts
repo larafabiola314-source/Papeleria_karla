@@ -4,11 +4,12 @@ import { AuthService } from '../../services/auth.service'; // [cite: 2026-02-21]
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
 import { NotificacionService } from '../../services/notificacion.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })

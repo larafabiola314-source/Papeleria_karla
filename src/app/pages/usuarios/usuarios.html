@@ -37,6 +37,16 @@
       </div>
 
       <div class="flex flex-col gap-2">
+        <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Correo Electrónico (Gmail)</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 material-symbols-outlined !text-xl">mail</span>
+          <input type="email" [value]="email()" (input)="email.set($any($event.target).value)" 
+                 placeholder="empleado@gmail.com"
+                 class="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 p-3 pl-12 text-sm font-semibold outline-none transition-all focus:border-lila-karla focus:bg-white">
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
         <label class="ml-1 text-[10px] font-black tracking-widest text-slate-500 uppercase">Contraseña</label>
         <input type="password" [value]="password()" (input)="password.set($any($event.target).value)" 
                placeholder="••••••••"
@@ -52,7 +62,7 @@
         </select>
       </div>
 
-      <div class="flex items-end gap-3 lg:col-span-1">
+      <div class="flex items-end gap-3 lg:col-span-2">
         <button (click)="limpiarCampos()" [disabled]="cargando()"
                 class="flex-1 rounded-2xl bg-slate-100 py-3 text-xs font-black text-slate-500 transition-all hover:bg-slate-200 active:scale-95 disabled:opacity-50">
           {{ idEditando() ? 'CANCELAR' : 'LIMPIAR' }}
@@ -76,8 +86,7 @@
         <thead class="bg-slate-50 text-[10px] font-black tracking-widest text-slate-400 uppercase">
           <tr>
             <th class="p-4 pl-8">ID</th>
-            <th class="p-4">Nombre Completo</th>
-            <th class="p-4">Username</th>
+            <th class="p-4">Nombre e Email</th> <th class="p-4">Username</th>
             <th class="p-4">Rol</th>
             <th class="p-4">Registro</th>
             <th class="p-4 pr-8 text-right">Acciones</th>
@@ -86,7 +95,11 @@
         <tbody class="divide-y divide-slate-50">
           <tr *ngFor="let u of listaUsuarios()" class="group transition-colors hover:bg-slate-50/50">
             <td class="p-4 pl-8 text-xs font-bold text-slate-400">#{{ u.id }}</td>
-            <td class="p-4 text-sm font-black text-slate-800">{{ u.nombre }} {{ u.ap }} {{ u.am }}</td>
+            <td class="p-4">
+              <div class="flex flex-col">
+                <span class="text-sm font-black text-slate-800">{{ u.nombre }} {{ u.ap }} {{ u.am }}</span>
+                <span class="text-[10px] font-medium text-slate-400 italic">{{ u.email }}</span> </div>
+            </td>
             <td class="p-4">
               <span class="rounded-lg bg-purple-50 px-2 py-1 text-xs font-bold text-lila-karla">
                 @{{ u.username }}
