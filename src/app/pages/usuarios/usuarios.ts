@@ -50,6 +50,10 @@ export class Usuarios implements OnInit {
   }
 
   registrarUsuario() {
+
+    const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    const usernameValido = /^[a-zA-Z0-0.]+$/;
+
     const datosUsuario = {
       id: this.idEditando(),
       nombre: this.nombre().trim(),
@@ -60,6 +64,16 @@ export class Usuarios implements OnInit {
       password: this.password().trim(),
       role: this.role() 
     };
+
+    if (!soloLetras.test(datosUsuario.nombre) || !soloLetras.test(datosUsuario.ap) || !soloLetras.test(datosUsuario.am)) {
+    this.toast.mostrar('Los nombres y apellidos solo deben contener letras', 'error'); 
+    return;
+    }
+
+    if (!usernameValido.test(datosUsuario.username)) {
+    this.toast.mostrar('El username solo permite letras, números y puntos', 'error'); 
+    return;
+    } 
 
     if (!datosUsuario.nombre || !datosUsuario.ap || !datosUsuario.am || !datosUsuario.username || !datosUsuario.email) {
       this.toast.mostrar('Por favor, completa todos los campos obligatorios', 'error');
