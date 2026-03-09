@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
  
-  private urlApi = 'http://127.0.0.1:8000/api/login';
+  private urlApi = 'https://papeleriaback.papeleriakarla.com/api/login';
 
   validarUsuario(username: string, password: string): Observable<any> {
     return this.http.post(this.urlApi, { username, password });

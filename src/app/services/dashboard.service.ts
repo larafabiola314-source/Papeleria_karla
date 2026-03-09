@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class DashboardService {
   private http = inject(HttpClient);
   // URL de la API de Laravel
-  private url = 'http://127.0.0.1:8000/api/dashboard';
+  private url = 'https://papeleriaback.papeleriakarla.com/api/dashboard';
 
   obtenerDashboard(): Observable<any> {
     return this.http.get(this.url);

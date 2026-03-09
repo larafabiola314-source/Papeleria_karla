@@ -10,7 +10,7 @@ export class UsuarioService {
   private http = inject(HttpClient);
   
   // URL para la gestión de usuarios/empleados en Laravel
-  private urlApi = 'http://127.0.0.1:8000/api/usuarios';
+  private urlApi = 'https://papeleriaback.papeleriakarla.com/api/usuarios';
 
   /**
    * Obtiene la lista de todos los empleados

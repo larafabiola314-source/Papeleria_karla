@@ -6,7 +6,7 @@ import { Producto } from '../models/producto';
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
   private http = inject(HttpClient);
-  private url = 'http://127.0.0.1:8000/api/productos'; 
+  private url = 'https://papeleriaback.papeleriakarla.com/api/productos'; 
 
   obtenerProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.url);

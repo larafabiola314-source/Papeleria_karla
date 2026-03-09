@@ -9,7 +9,7 @@ export class VentaService {
   private http = inject(HttpClient);
   
   // URL que apunta al controlador de ventas en Laravel
-  private urlApi = 'http://127.0.0.1:8000/api/ventas'; 
+  private urlApi = 'https://papeleriaback.papeleriakarla.com/api/ventas'; 
 
   /**
    * Registra una nueva venta en el sistema.
