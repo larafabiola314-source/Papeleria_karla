@@ -72,7 +72,7 @@ export class ResetPassword implements OnInit {
     password_confirmation: this.password_confirmation()
   };
 
-  this.http.post('http://localhost:8000/api/password/reset', datos)
+  this.http.post('https://papeleriaback.papeleriakarla.com/api/password/reset', datos)
     .subscribe({
       next: () => {
         this.toast.mostrar('¡Contraseña actualizada! Ya puedes iniciar sesión.', 'success'); 

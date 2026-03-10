@@ -53,7 +53,7 @@ export class SolicitarReset {
   }
   this.cargando.set(true);
   
-  this.http.post('http://localhost:8000/api/password/email', { email: this.email() })
+  this.http.post('https://papeleriaback.papeleriakarla.com/api/password/email', { email: this.email() })
     .subscribe({
       next: () => {
         this.toast.mostrar('¡Listo! Revisa tu bandeja de entrada en Gmail', 'success'); // [cite: 2026-02-21]

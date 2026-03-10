@@ -91,7 +91,7 @@ export class Usuarios implements OnInit {
     // Usamos el método unificado guardarUsuario (POST o PUT)
     this.usuarioService.guardarUsuario(datosUsuario).subscribe({
       next: (res: any) => this.procesarRespuesta(res, this.idEditando() ? '¡Usuario actualizado!' : '¡Usuario registrado!'),
-      error: () => this.procesarError()
+      error: (err) => this.procesarError(err)
     });
   }
 
@@ -113,7 +113,7 @@ export class Usuarios implements OnInit {
           this.toast.mostrar('Usuario eliminado del sistema', 'success');
           this.cargarUsuarios();
         },
-        error: () => this.procesarError()
+        error: (err) => this.procesarError(err)
       });
     }
   }
@@ -125,9 +125,23 @@ export class Usuarios implements OnInit {
     this.cargarUsuarios();
   }
 
-  procesarError() {
+    procesarError(err: any) { // [cite: 2026-03-09]
     this.cargando.set(false);
-    this.toast.mostrar('Error de conexión con Laravel', 'error');
+    
+    const erroresValidacion = err.error?.errors;
+    
+    if (erroresValidacion) {
+      if (erroresValidacion.email) {
+        this.toast.mostrar(erroresValidacion.email[0], 'error'); 
+        return;
+      }
+      if (erroresValidacion.username) {
+        this.toast.mostrar(erroresValidacion.username[0], 'error'); 
+        return;
+      }
+    }
+    const mensajeGeneral = err.error?.message || 'Error de conexión con el servidor';
+    this.toast.mostrar(mensajeGeneral, 'error'); 
   }
 
   limpiarCampos() {
