@@ -1,6 +1,6 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../services/dashboard.service'; // Cambiamos el servicio
+import { DashboardService } from '../../services/dashboard.service'; 
 
 @Component({
   selector: 'app-inicio',
@@ -10,7 +10,7 @@ import { DashboardService } from '../../services/dashboard.service'; // Cambiamo
   styleUrl: './inicio.css'
 })
 export class Inicio implements OnInit {
-  // Inyectamos el servicio correcto
+ 
   private servicioDashboard = inject(DashboardService);
 
   gananciasHoy = signal<number>(0);
@@ -30,10 +30,8 @@ export class Inicio implements OnInit {
   }
 
   cargarDashboard() {
-    // Usamos el servicio de Dashboard
     this.servicioDashboard.obtenerDashboard().subscribe({
       next: (res: any) => {
-        // Laravel devolverá los datos en este formato JSON
         this.gananciasHoy.set(res.ganancias_hoy || 0);
         this.ventasHoy.set(res.ventas_hoy || 0);
         this.minutosUltimaVenta.set(res.minutos_ultima_venta ?? '-');

@@ -14,7 +14,6 @@ import { ConfirmacionService } from '../../services/confirmacion.service';
   styleUrl: './usuarios.css'
 })
 export class Usuarios implements OnInit {
-  // Inyectamos el servicio especializado
   private usuarioService = inject(UsuarioService);
   private toast = inject(NotificacionService);
   private confirmar = inject(ConfirmacionService);
@@ -35,7 +34,6 @@ export class Usuarios implements OnInit {
     const datosUsuario = localStorage.getItem('usuario_logueado');
     if (datosUsuario) {
       const usuarioParseado = JSON.parse(datosUsuario);
-      // Laravel devuelve 'id' en minúsculas
       const idReal = usuarioParseado.id; 
       this.idUsuarioLogueado.set(Number(idReal));
     }
@@ -80,7 +78,6 @@ export class Usuarios implements OnInit {
       return;
     }
 
-    // Validaciones de contraseña
     if (!this.idEditando() && (!datosUsuario.password || datosUsuario.password.length < 8)) {
       this.toast.mostrar('La contraseña debe tener al menos 8 caracteres', 'error');
       return;
@@ -88,7 +85,6 @@ export class Usuarios implements OnInit {
 
     this.cargando.set(true);
 
-    // Usamos el método unificado guardarUsuario (POST o PUT)
     this.usuarioService.guardarUsuario(datosUsuario).subscribe({
       next: (res: any) => this.procesarRespuesta(res, this.idEditando() ? '¡Usuario actualizado!' : '¡Usuario registrado!'),
       error: (err) => this.procesarError(err)
@@ -125,7 +121,7 @@ export class Usuarios implements OnInit {
     this.cargarUsuarios();
   }
 
-    procesarError(err: any) { // [cite: 2026-03-09]
+    procesarError(err: any) {
     this.cargando.set(false);
     
     const erroresValidacion = err.error?.errors;
@@ -156,7 +152,6 @@ export class Usuarios implements OnInit {
   }
 
   prepararEdicion(usuario: Usuario) {
-    // Sincronizamos con las propiedades en minúsculas del modelo
     this.idEditando.set(usuario.id);
     this.nombre.set(usuario.nombre);
     this.ap.set(usuario.ap);

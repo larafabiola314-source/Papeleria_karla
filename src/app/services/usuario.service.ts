@@ -8,21 +8,13 @@ import { Usuario } from '../models/usuario';
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  
-  // URL para la gestión de usuarios/empleados en Laravel
   private urlApi = 'https://papeleriaback.papeleriakarla.com/api/usuarios';
 
-  /**
-   * Obtiene la lista de todos los empleados
-   */
+  
   obtenerUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.urlApi);
   }
 
-  /**
-   * Registra un nuevo usuario o actualiza uno existente
-   * Si el objeto tiene un 'id', Laravel usará el método PUT [cite: 2025-11-23]
-   */
   guardarUsuario(datos: any): Observable<any> {
     if (datos.id) {
       return this.http.put(`${this.urlApi}/${datos.id}`, datos);
@@ -30,9 +22,6 @@ export class UsuarioService {
     return this.http.post(this.urlApi, datos);
   }
 
-  /**
-   * Elimina (o desactiva) un usuario por su ID
-   */
   eliminarUsuario(id: number): Observable<any> {
     return this.http.delete(`${this.urlApi}/${id}`); 
   }

@@ -41,25 +41,24 @@ export class ResetPassword implements OnInit {
   password_confirmation = signal('');
 
   ngOnInit() {
-    // Leemos los datos que Laravel mandó en la URL [cite: 2026-03-07]
     this.token = this.route.snapshot.queryParams['token'];
     this.email = this.route.snapshot.queryParams['email'];
   }
 
   guardarNuevaPassword() {
-  // 1. Validar que los campos no estén vacíos [cite: 2026-03-07]
+
   if (!this.password() || !this.password_confirmation()) {
     this.toast.mostrar('Por favor, completa ambos campos', 'error'); 
     return;
   }
 
-  // 2. Validar longitud mínima (seguridad básica) [cite: 2026-01-05, 2026-03-07]
+
   if (this.password().length < 8) {
     this.toast.mostrar('La contraseña debe tener al menos 8 caracteres', 'error'); 
     return;
   }
 
-  // 3. Validar que coincidan [cite: 2026-03-07]
+
   if (this.password() !== this.password_confirmation()) {
     this.toast.mostrar('Las contraseñas no coinciden', 'error'); 
     return;
@@ -79,7 +78,6 @@ export class ResetPassword implements OnInit {
         this.router.navigate(['/login']); 
       },
       error: (err) => {
-        // Mostramos el error específico de Laravel si el token expiró [cite: 2026-03-07]
         const msg = err.error?.error || 'El enlace ha expirado o es inválido';
         this.toast.mostrar(msg, 'error'); 
       }

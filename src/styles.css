@@ -2,7 +2,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Aquí definimos tus colores de Papelería Karla */
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --color-lila-karla: #C8A2C8;
   --color-vino-karla: #932154;

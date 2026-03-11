@@ -1,7 +1,7 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductoService } from '../../services/producto.service'; // Nuevo [cite: 2026-02-21]
-import { VentaService } from '../../services/venta.service'; // Nuevo [cite: 2026-02-21]
+import { ProductoService } from '../../services/producto.service'; 
+import { VentaService } from '../../services/venta.service'; 
 import { Producto } from '../../models/producto';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ConfirmacionService } from '../../services/confirmacion.service'; 
@@ -22,8 +22,8 @@ export interface ProductoVenta extends Producto {
 export class Ventas implements OnInit {
 
   private notificacion = inject(NotificacionService);
-  private productoService = inject(ProductoService); // Inyectamos servicio de productos [cite: 2026-02-21]
-  private ventaService = inject(VentaService); // Inyectamos servicio de ventas [cite: 2026-02-21]
+  private productoService = inject(ProductoService); 
+  private ventaService = inject(VentaService); 
   private confirmar = inject(ConfirmacionService);
 
   listaProductos = signal<ProductoVenta[]>([]);
@@ -37,7 +37,6 @@ export class Ventas implements OnInit {
   cargarInventario() {
     this.productoService.obtenerProductos().subscribe({
       next: (res: Producto[]) => {
-        // Ajustamos a p.stock (minúscula) [cite: 2025-11-30]
         const productosConCantidad = res.map(p => ({ ...p, cantidad: 0,
           opcionesStock: Array.from({ length: (p.stock || 0) + 1 }, (_, i) => i) 
       }));
@@ -48,7 +47,6 @@ export class Ventas implements OnInit {
   }
 
   totalVenta = computed(() => {
-    // Ajustamos a p.precio (minúscula) [cite: 2025-11-30]
     return this.listaProductos().reduce((total, p) => total + (p.precio * p.cantidad), 0);
   });
 
@@ -60,7 +58,7 @@ export class Ventas implements OnInit {
     const termino = this.terminoBusqueda().toLowerCase();
     const productos = this.listaProductos();
 
-    // Ajustamos a p.nombre (minúscula) [cite: 2025-11-30]
+  
     const filtrados = productos.filter(p => 
       p.nombre.toLowerCase().includes(termino)
     );
@@ -76,7 +74,6 @@ export class Ventas implements OnInit {
     const nuevaCantidad = parseInt(evento.target.value, 10);
     this.listaProductos.update(productos => 
       productos.map(p => {
-        // Ajustamos a p.id (minúscula) [cite: 2025-11-30]
         if (p.id === productoId) {
           return { ...p, cantidad: nuevaCantidad };
         }
@@ -128,18 +125,16 @@ export class Ventas implements OnInit {
     if (productosVenta.length === 0) return;
     
     const datosUsuario = localStorage.getItem('usuario_logueado');
-    // Ajustamos a .id (minúscula) del objeto guardado en login [cite: 2025-11-23]
     const idUsuario = datosUsuario ? JSON.parse(datosUsuario).id : 1; 
 
     const payload = {
-      user_id: idUsuario, // Cambiado a user_id para coincidir con la migración de Laravel
+      user_id: idUsuario, 
       total: this.totalVenta(),
       productos: productosVenta
     };
 
     this.cargando.set(true);
 
-    // Usamos el nuevo ventaService [cite: 2026-02-21]
     this.ventaService.registrarVenta(payload).subscribe({
       next: (res: any) => {
         this.cargando.set(false);

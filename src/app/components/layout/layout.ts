@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './layout.css'
 })
 export class Layout implements OnInit {
-  // Usamos inject en lugar del constructor para seguir el estándar moderno de Angular
   private ruteador = inject(Router);
   rolUsuario = signal<string>('user');
 
@@ -23,7 +22,7 @@ export class Layout implements OnInit {
   menuAbierto = signal(false);
 
   ngOnInit() {
-    // 1. Obtener nombre del usuario desde el nuevo JSON de Laravel
+    
     const datos = localStorage.getItem('usuario_logueado');
     if (datos) {
       const usuario = JSON.parse(datos);
@@ -31,7 +30,7 @@ export class Layout implements OnInit {
       this.rolUsuario.set(usuario.role || 'user');
     }
 
-    // 2. Suscribirse a eventos de ruta
+   
     this.ruteador.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {

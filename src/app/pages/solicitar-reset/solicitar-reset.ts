@@ -48,7 +48,7 @@ export class SolicitarReset {
 
   enviarEnlace() {
   if (!this.email()) {
-    this.toast.mostrar('Por favor, escribe tu correo', 'error'); // [cite: 2026-02-21]
+    this.toast.mostrar('Por favor, escribe tu correo', 'error'); 
     return;
   }
   this.cargando.set(true);
@@ -56,11 +56,11 @@ export class SolicitarReset {
   this.http.post('https://papeleriaback.papeleriakarla.com/api/password/email', { email: this.email() })
     .subscribe({
       next: () => {
-        this.toast.mostrar('¡Listo! Revisa tu bandeja de entrada en Gmail', 'success'); // [cite: 2026-02-21]
+        this.toast.mostrar('¡Listo! Revisa tu bandeja de entrada en Gmail', 'success'); 
         this.cargando.set(false);
       },
       error: () => {
-        this.toast.mostrar('No pudimos encontrar ese correo en el sistema', 'error'); // [cite: 2026-02-21]
+        this.toast.mostrar('No pudimos encontrar ese correo en el sistema', 'error'); 
         this.cargando.set(false);
       }
     });

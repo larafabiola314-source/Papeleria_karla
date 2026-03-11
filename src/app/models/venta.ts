@@ -1,9 +1,9 @@
 export interface Venta {
   id?: number;
-  user_id: number; // Relación con el usuario que vendió [cite: 2025-11-23]
+  user_id: number; 
   total: number;
   created_at?: Date;
-  detalles: VentaDetalle[]; // Lista de productos vendidos
+  detalles: VentaDetalle[]; 
 }
 
 export interface VentaDetalle {

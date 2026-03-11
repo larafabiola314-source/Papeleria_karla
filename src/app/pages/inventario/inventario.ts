@@ -1,6 +1,6 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductoService } from '../../services/producto.service'; // Cambio de servicio [cite: 2026-02-21]
+import { ProductoService } from '../../services/producto.service'; 
 import { Producto } from '../../models/producto';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ConfirmacionService } from '../../services/confirmacion.service';
@@ -13,7 +13,6 @@ import { ConfirmacionService } from '../../services/confirmacion.service';
   styleUrl: './inventario.css',
 })
 export class Inventario implements OnInit {
-  // Inyecciones corregidas
   private productoService = inject(ProductoService);
   private toast = inject(NotificacionService);
   private confirmar = inject(ConfirmacionService);
@@ -28,7 +27,6 @@ export class Inventario implements OnInit {
   listaProductos = signal<Producto[]>([]);
   terminoBusqueda = signal('');
 
-  // Ajustado a minúsculas para coincidir con Laravel [cite: 2025-11-23]
   productosFiltrados = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase();
     if (!termino) return this.listaProductos();
@@ -65,7 +63,7 @@ export class Inventario implements OnInit {
 
     this.cargando.set(true);
 
-    // Llamada dinámica (POST o PUT) [cite: 2025-11-23]
+    
     this.productoService.guardarProducto(datosProducto, this.idEditando()).subscribe({
       next: () => {
         this.cargando.set(false);
@@ -98,7 +96,6 @@ export class Inventario implements OnInit {
   }
 
   prepararEdicion(producto: Producto) {
-    // Usamos las propiedades en minúsculas [cite: 2025-11-23]
     this.idEditando.set(producto.id);
     this.nombre.set(producto.nombre);
     this.descripcion.set(producto.descripcion);

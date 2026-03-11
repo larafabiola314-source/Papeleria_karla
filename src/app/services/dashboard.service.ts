@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  // URL de la API de Laravel
   private url = 'https://papeleriaback.papeleriakarla.com/api/dashboard';
 
   obtenerDashboard(): Observable<any> {

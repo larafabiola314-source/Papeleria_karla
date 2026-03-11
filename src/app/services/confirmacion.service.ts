@@ -6,7 +6,6 @@ export class ConfirmacionService {
   public mensaje = signal('');
   private resolver: any;
 
-  // Esta función devuelve una "Promesa" (espera a que el usuario haga clic)
   preguntar(mensaje: string): Promise<boolean> {
     this.mensaje.set(mensaje);
     this.visible.set(true);

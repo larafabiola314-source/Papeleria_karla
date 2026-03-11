@@ -11,7 +11,6 @@ import { SolicitarReset } from './pages/solicitar-reset/solicitar-reset';
 import { ResetPassword } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
-  // login sin el menu de arriba
   { path: 'login', component: Login },
   { path: 'solicitar-reset', component: SolicitarReset },
   { path: 'reset-password', component: ResetPassword },
