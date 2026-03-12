@@ -2,7 +2,7 @@
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class NotificacionService {e
+export class NotificacionService {
   public mensajeActual = signal<any>(null);
 
   mostrar(mensaje: string, tipo: 'success' | 'error' = 'success') {
