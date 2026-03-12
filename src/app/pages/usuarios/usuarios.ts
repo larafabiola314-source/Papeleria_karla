@@ -69,7 +69,7 @@ export class Usuarios implements OnInit {
     }
 
     if (!usernameValido.test(datosUsuario.username)) {
-    this.toast.mostrar('El username solo permite letras, números y puntos', 'error'); 
+    this.toast.mostrar('El username solo permite letras', 'error'); 
     return;
     } 
 
