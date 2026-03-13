@@ -13,6 +13,8 @@ export class Inicio implements OnInit {
  
   private servicioDashboard = inject(DashboardService);
 
+  isAdmin = signal<boolean>(false);
+
   gananciasHoy = signal<number>(0);
   tendenciaPorcentaje = signal<number>(0);
   ventasHoy = signal<number>(0);
@@ -26,7 +28,17 @@ export class Inicio implements OnInit {
   ultimasVentas = signal<any[]>([]);
 
   ngOnInit() {
+    this.verificarRol(); 
     this.cargarDashboard();
+  }
+
+  
+  verificarRol() {
+    const datosUsuario = localStorage.getItem('usuario_logueado');
+    if (datosUsuario) {
+      const usuario = JSON.parse(datosUsuario);
+      this.isAdmin.set(usuario.role === 'admin');
+    }
   }
 
   cargarDashboard() {
