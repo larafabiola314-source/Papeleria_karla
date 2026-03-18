@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 export interface ProductoVenta extends Producto {
   cantidad: number;
-  opcionesStock?: number[];
+  activo?: boolean; // Añadimos activo como opcional para evitar errores de TypeScript
 }
 
 @Component({
@@ -37,92 +37,87 @@ export class Ventas implements OnInit {
   cargarInventario() {
     this.productoService.obtenerProductos().subscribe({
       next: (res: Producto[]) => {
-        const productosConCantidad = res.map(p => ({ ...p, cantidad: 0,
-          opcionesStock: Array.from({ length: (p.stock || 0) + 1 }, (_, i) => i) 
-      }));
+        // Filtramos para asegurar que solo se muestren productos activos
+        const productosConCantidad = (res as any[])
+          .filter(p => p.activo === true || p.activo === 1 || p.activo === undefined)
+          .map(p => ({ 
+            ...p, 
+            cantidad: 0 
+          }));
         this.listaProductos.set(productosConCantidad);
       },
       error: () => this.notificacion.mostrar('Error al cargar productos', 'error')
     });
   }
 
+  // AHORA TENEMOS EL CARRITO COMO SEÑAL COMPUTADA CENTRAL
+  carrito = computed(() => {
+    return this.listaProductos().filter(p => p.cantidad > 0);
+  });
+
+  // LOS TOTALES SE CALCULAN DIRECTO DEL CARRITO
   totalVenta = computed(() => {
-    return this.listaProductos().reduce((total, p) => total + (p.precio * p.cantidad), 0);
+    return this.carrito().reduce((total, p) => total + (p.precio * p.cantidad), 0);
   });
 
   totalUnidades = computed(() => {
-    return this.listaProductos().reduce((total, p) => total + p.cantidad, 0);
+    return this.carrito().reduce((total, p) => total + p.cantidad, 0);
   });
 
   productosFiltrados = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase();
-    const productos = this.listaProductos();
-
-  
-    const filtrados = productos.filter(p => 
-      p.nombre.toLowerCase().includes(termino)
-    );
-
-    return filtrados.sort((a, b) => {
+    return this.listaProductos().filter(p => 
+      p.nombre.toLowerCase().includes(termino) || 
+      p.id.toString().includes(termino)
+    ).sort((a, b) => {
       if (a.cantidad > 0 && b.cantidad === 0) return -1;
       if (a.cantidad === 0 && b.cantidad > 0) return 1;
       return 0;
     });
   });
 
-  cambiarCantidad(productoId: number, evento: any) {
-    const nuevaCantidad = parseInt(evento.target.value, 10);
+  // FUNCIÓN ÚNICA Y SEGURA PARA ACTUALIZAR CANTIDADES
+  actualizarCantidad(productoId: number, nuevaCantidad: number) {
     this.listaProductos.update(productos => 
       productos.map(p => {
         if (p.id === productoId) {
-          return { ...p, cantidad: nuevaCantidad };
+          let cantidadValidada = Math.max(0, Math.min(nuevaCantidad, p.stock));
+          
+          if (nuevaCantidad > p.stock) {
+            this.notificacion.mostrar(`Stock insuficiente de ${p.nombre}. Máximo: ${p.stock}`, 'error');
+          }
+          
+          return { ...p, cantidad: cantidadValidada };
         }
         return p;
       })
     );
   }
 
-  cambiarCantidadManual(producto: any, cambio: number) {
-    const nuevaCantidad = producto.cantidad + cambio;
-    if (nuevaCantidad >= 0 && nuevaCantidad <= producto.stock) {
-      this.cambiarCantidad(producto.id, { target: { value: nuevaCantidad } });
-    }
+  cambiarCantidadManual(producto: ProductoVenta, cambio: number) {
+    const nuevaCantidad = (producto.cantidad || 0) + cambio;
+    this.actualizarCantidad(producto.id, nuevaCantidad);
   }
 
-  validarStockDinamico(producto: any) {
-    if (producto.cantidad === null || producto.cantidad === undefined) return; 
-
-    if (producto.cantidad > producto.stock) {
-      producto.cantidad = producto.stock;
-      this.notificacion.mostrar(`Stock máximo alcanzado (${producto.stock} unidades)`, 'error');
-    }
-
-    if (producto.cantidad < 0) producto.cantidad = 0;
-  }
-
-  validarEntradaTeclado(producto: any, evento: any) {
-    let valor = parseInt(evento.target.value, 10);
-    if (isNaN(valor) || valor < 0) valor = 0;
-
-    if (valor > producto.stock) {
-      valor = producto.stock;
-      this.notificacion.mostrar(`Solo hay ${producto.stock} unidades disponibles de ${producto.nombre}`, 'error');
-    }
-
-    this.cambiarCantidad(producto.id, { target: { value: valor } });
+  // ESTA ES LA FUNCIÓN QUE SE EJECUTA AL DAR "ENTER" O SALIR DEL INPUT
+  validarEntradaTeclado(producto: ProductoVenta, evento: any) {
+    const valor = parseInt(evento.target.value, 10);
+    const cantidadFinal = isNaN(valor) ? 0 : valor;
+    this.actualizarCantidad(producto.id, cantidadFinal);
   }
 
   realizarVenta() {
-    const productosVenta = this.listaProductos()
-      .filter(p => p.cantidad > 0)
-      .map(p => ({
-        id_producto: p.id,
-        cantidad: p.cantidad,
-        precio: p.precio,
-        subtotal: p.precio * p.cantidad
-      }));
+    const itemsVenta = this.carrito().map(p => ({
+      id_producto: p.id,
+      cantidad: p.cantidad,
+      precio: p.precio,
+      subtotal: p.precio * p.cantidad
+    }));
 
-    if (productosVenta.length === 0) return;
+    if (itemsVenta.length === 0) {
+      this.notificacion.mostrar('Agregue al menos un producto al ticket', 'error');
+      return;
+    }
     
     const datosUsuario = localStorage.getItem('usuario_logueado');
     const idUsuario = datosUsuario ? JSON.parse(datosUsuario).id : 1; 
@@ -130,7 +125,7 @@ export class Ventas implements OnInit {
     const payload = {
       user_id: idUsuario, 
       total: this.totalVenta(),
-      productos: productosVenta
+      productos: itemsVenta
     };
 
     this.cargando.set(true);
@@ -138,26 +133,22 @@ export class Ventas implements OnInit {
     this.ventaService.registrarVenta(payload).subscribe({
       next: (res: any) => {
         this.cargando.set(false);
-        if (res.status === 'success') {
-          this.notificacion.mostrar('¡Venta registrada con éxito!', 'success');
-          this.limpiarCarrito();
-          this.cargarInventario();
-        } else {
-          this.notificacion.mostrar('Error: ' + res.message, 'error');
-        }
+        this.notificacion.mostrar('¡Venta registrada con éxito!', 'success');
+        this.limpiarCarrito();
+        this.cargarInventario(); 
       },
-      error: () => {
+      error: (err) => {
         this.cargando.set(false);
-        this.notificacion.mostrar('Error de conexión con el servidor', 'error');
+        const msg = err.error?.message || 'Hubo un problema al procesar la venta';
+        this.notificacion.mostrar(msg, 'error');
       }
     });
   }
 
   async cancelarVenta() {
-    const seguro = await this.confirmar.preguntar(
-      '¿Seguro que deseas cancelar la venta actual?'
-    );
+    if (this.carrito().length === 0) return;
 
+    const seguro = await this.confirmar.preguntar('¿Seguro que deseas vaciar el ticket de venta actual?');
     if (seguro) {
       this.limpiarCarrito();
       this.notificacion.mostrar('Venta cancelada', 'success');

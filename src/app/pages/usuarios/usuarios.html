@@ -85,7 +85,6 @@
       <table class="w-full border-collapse text-left">
         <thead class="bg-slate-50 text-[10px] font-black tracking-widest text-slate-400 uppercase">
           <tr>
-            <th class="p-4 pl-8">ID</th>
             <th class="p-4">Nombre e Email</th> <th class="p-4">Username</th>
             <th class="p-4">Rol</th>
             <th class="p-4">Registro</th>
@@ -94,7 +93,6 @@
         </thead>
         <tbody class="divide-y divide-slate-50">
           <tr *ngFor="let u of listaUsuarios()" class="group transition-colors hover:bg-slate-50/50">
-            <td class="p-4 pl-8 text-xs font-bold text-slate-400">#{{ u.id }}</td>
             <td class="p-4">
               <div class="flex flex-col">
                 <span class="text-sm font-black text-slate-800">{{ u.nombre }} {{ u.ap }} {{ u.am }}</span>
