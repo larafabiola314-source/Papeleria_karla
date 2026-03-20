@@ -63,8 +63,18 @@ export class Usuarios implements OnInit {
       role: this.role() 
     };
 
-    if (!soloLetras.test(datosUsuario.nombre) || !soloLetras.test(datosUsuario.ap) || !soloLetras.test(datosUsuario.am)) {
-    this.toast.mostrar('Los nombres y apellidos solo deben contener letras', 'error'); 
+    if (!soloLetras.test(datosUsuario.nombre)){
+    this.toast.mostrar('El nombre solo debe contener letras', 'error'); 
+    return;
+    }
+
+    if (!soloLetras.test(datosUsuario.ap)){
+    this.toast.mostrar('Los apellidos paternos solo debe contener letras', 'error'); 
+    return;
+    }
+
+    if ( !soloLetras.test(datosUsuario.am)){
+    this.toast.mostrar('Los apellidos maternos solo debe contener letras', 'error'); 
     return;
     }
 
