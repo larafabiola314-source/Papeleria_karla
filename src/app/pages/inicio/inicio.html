@@ -2,7 +2,7 @@
   
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
     
-    <div class="rounded-2xl border-t-4 border-lila-karla bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+    <div *ngIf="isAdmin()" class="rounded-2xl border-t-4 border-lila-karla bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
       <span class="text-[10px] font-black tracking-widest text-slate-400 uppercase">GANANCIAS ESTIMADAS</span>
       <div class="mt-2 text-3xl font-black text-slate-800">${{ gananciasHoy() | number:'1.2-2' }}</div>
       <div class="mt-3 text-sm font-bold" [class.text-emerald-500]="tendenciaPorcentaje() >= 0" [class.text-red-500]="tendenciaPorcentaje() < 0">
@@ -25,16 +25,37 @@
     </div>
   </div>
 
-   <section>
+  <section>
+    <h2 class="mb-4 flex items-center gap-2 text-lg font-black text-slate-800">
+      <span class="h-6 w-1 rounded-full bg-lila-karla"></span>
+      Número de ventas por:
+    </h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5 transition-all hover:bg-purple-100/50">
+        <span class="text-xs font-black text-lila-karla">DÍA</span>
+        <div class="text-2xl font-black text-purple-500">{{ ventasDia() }}</div>
+      </div>
+      <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5 transition-all hover:bg-purple-100/50">
+        <span class="text-xs font-black text-lila-karla">SEMANA</span>
+        <div class="text-2xl font-black text-purple-500">{{ ventasSemana() }}</div>
+      </div>
+      <div class="flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-5 transition-all hover:bg-purple-100/50">
+        <span class="text-xs font-black text-lila-karla">MES</span>
+        <div class="text-2xl font-black text-purple-500">{{ ventasMes() }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2 class="mb-4 flex items-center gap-2 text-lg font-black text-slate-800">
       Últimas Ventas Registradas
       <span class="material-symbols-outlined text-lila-karla !text-xl">history_edu</span>
     </h2>
 
     <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-      <div class="max-h-96 overflow-y-auto">
+      <div class="max-h-96 overflow-y-auto custom-scrollbar">
         <table class="w-full border-collapse text-left">
-          <thead class="sticky top-0 bg-slate-50 text-[11px] font-black tracking-wider text-slate-500 uppercase">
+          <thead class="sticky top-0 bg-slate-50 text-[11px] font-black tracking-wider text-slate-500 uppercase z-10">
             <tr>
               <th class="p-4 border-b border-slate-100">Productos</th>
               
